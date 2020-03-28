@@ -17,11 +17,15 @@ public class VtApp extends Application {
         this.model = new Model();
     }
 
-    public Context getContext() {
+    public static Context getContext() {
         return instance.getContext();
     }
 
-    public Model getModel() {
+    public static Model getModel() {
         return instance.model;
+    }
+
+    public static String string(int id) {
+        return getContext().getString(id);
     }
 }

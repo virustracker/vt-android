@@ -1,6 +1,6 @@
 package ch.virustracker.app.model.database.seentoken;
 
-import android.database.Cursor;
+import java.util.List;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -12,13 +12,13 @@ import androidx.room.Query;
 public interface SeenTokenDao {
 
     @Query("SELECT * FROM SeenToken")
-    Cursor selectAll();
+    List<SeenToken> selectAll();
 
-    @Query("SELECT * FROM SeenToken WHERE token == :token AND timestampMs >= :from AND timestampMs < :to ORDER BY timestampMs ASC")
-    Cursor selectByTimeSpanAndToken(String token, Long from, Long to);
+    @Query("SELECT * FROM SeenToken WHERE tokenValue == :token AND timestampMs >= :from AND timestampMs < :to ORDER BY timestampMs ASC")
+    List<SeenToken> selectByTimeSpanAndToken(String token, Long from, Long to);
 
     @Query("SELECT * FROM SeenToken WHERE timestampMs >= :from AND timestampMs < :to ORDER BY timestampMs ASC")
-    Cursor selectByTimeSpan(Long from, Long to);
+    List<SeenToken> selectByTimeSpan(Long from, Long to);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long[] insertAll(SeenToken... entry);

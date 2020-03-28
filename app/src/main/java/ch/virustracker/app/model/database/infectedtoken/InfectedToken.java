@@ -1,4 +1,4 @@
-package ch.virustracker.app.model.database.owntoken;
+package ch.virustracker.app.model.database.infectedtoken;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 import ch.virustracker.app.model.Token;
 
 @Entity(indices = {@Index(value = {"tokenValue", "timestampMs"}, unique = true)})
-public class OwnToken extends Token {
+public class InfectedToken extends Token {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = "id")
@@ -18,9 +18,6 @@ public class OwnToken extends Token {
 
     @ColumnInfo(name = "timestampMs")
     private float timestampMs;
-
-    @ColumnInfo(name = "validForMs")
-    private long validForMs;
 
     public long getId() {
         return id;
@@ -40,14 +37,6 @@ public class OwnToken extends Token {
 
     public void setTimestampMs(float timestampMs) {
         this.timestampMs = timestampMs;
-    }
-
-    public long getValidForMs() {
-        return validForMs;
-    }
-
-    public void setValidForMs(long validForMs) {
-        this.validForMs = validForMs;
     }
 
     @Override

@@ -4,16 +4,17 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import ch.virustracker.app.model.Token;
 
-@Entity(indices = {@Index(value = {"token", "timestampMs"}, unique = true)})
-public class SeenToken {
+@Entity(indices = {@Index(value = {"tokenValue", "timestampMs"}, unique = true)})
+public class SeenToken extends Token {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = "id")
     private long id;
 
-    @ColumnInfo(name = "token")
-    private String token;
+    @ColumnInfo(name = "tokenValue")
+    private String tokenValue;
 
     @ColumnInfo(name = "timestampMs")
     private float timestampMs;
@@ -29,12 +30,8 @@ public class SeenToken {
         this.id = id;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
+    public void setTokenValue(String tokenValue) {
+        this.tokenValue = tokenValue;
     }
 
     public float getTimestampMs() {
@@ -52,4 +49,10 @@ public class SeenToken {
     public void setSignalStrength(long signalStrength) {
         this.signalStrength = signalStrength;
     }
+
+    @Override
+    public String getTokenValue() {
+        return tokenValue;
+    }
+
 }
