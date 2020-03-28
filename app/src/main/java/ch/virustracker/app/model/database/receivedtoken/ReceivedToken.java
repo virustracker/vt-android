@@ -1,4 +1,4 @@
-package ch.virustracker.app.model.database.seentoken;
+package ch.virustracker.app.model.database.receivedtoken;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 import ch.virustracker.app.model.Token;
 
 @Entity(indices = {@Index(value = {"tokenValue", "timestampMs"}, unique = true)})
-public class SeenToken extends Token {
+public class ReceivedToken extends Token {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = "id")
@@ -21,6 +21,8 @@ public class SeenToken extends Token {
 
     @ColumnInfo(name = "signalStrength")
     private long signalStrength;
+
+    public ReceivedToken() {}
 
     public long getId() {
         return id;

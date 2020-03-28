@@ -1,4 +1,4 @@
-package ch.virustracker.app.model.database.owntoken;
+package ch.virustracker.app.model.database.advertisedtoken;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 import ch.virustracker.app.model.Token;
 
 @Entity(indices = {@Index(value = {"tokenValue", "timestampMs"}, unique = true)})
-public class OwnToken extends Token {
+public class AdvertisedToken extends Token {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = "id")
@@ -21,6 +21,14 @@ public class OwnToken extends Token {
 
     @ColumnInfo(name = "validForMs")
     private long validForMs;
+
+    public AdvertisedToken() {}
+
+    public AdvertisedToken(byte[] preImage, long timestampMs) {
+        super(preImage, timestampMs);
+        this.timestampMs = timestampMs - timestampMs%ROTATE_INTERVAL_MS;
+        this.validForMs = ROTATE_INTERVAL_MS;
+    }
 
     public long getId() {
         return id;

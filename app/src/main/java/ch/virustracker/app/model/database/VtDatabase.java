@@ -1,7 +1,5 @@
 package ch.virustracker.app.model.database;
 
-import android.content.Context;
-
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -10,12 +8,12 @@ import ch.virustracker.app.model.database.infectedtoken.InfectedToken;
 import ch.virustracker.app.model.database.infectedtoken.InfectedTokenDao;
 import ch.virustracker.app.model.database.location.Location;
 import ch.virustracker.app.model.database.location.LocationDao;
-import ch.virustracker.app.model.database.owntoken.OwnToken;
-import ch.virustracker.app.model.database.owntoken.OwnTokenDao;
-import ch.virustracker.app.model.database.seentoken.SeenToken;
-import ch.virustracker.app.model.database.seentoken.SeenTokenDao;
+import ch.virustracker.app.model.database.advertisedtoken.AdvertisedToken;
+import ch.virustracker.app.model.database.advertisedtoken.AdvertisedTokenDao;
+import ch.virustracker.app.model.database.receivedtoken.ReceivedToken;
+import ch.virustracker.app.model.database.receivedtoken.ReceivedTokenDao;
 
-@Database(entities = {OwnToken.class, SeenToken.class, InfectedToken.class, Location.class}, version = 1, exportSchema = false)
+@Database(entities = {AdvertisedToken.class, ReceivedToken.class, InfectedToken.class, Location.class}, version = 1, exportSchema = false)
 public abstract class VtDatabase extends RoomDatabase {
 
     /** The only instance */
@@ -41,8 +39,8 @@ public abstract class VtDatabase extends RoomDatabase {
         }
     }
 
-    public abstract OwnTokenDao ownTokenDao();
-    public abstract SeenTokenDao seenTokenDao();
+    public abstract AdvertisedTokenDao ownTokenDao();
+    public abstract ReceivedTokenDao seenTokenDao();
     public abstract InfectedTokenDao infectedTokenDao();
     public abstract LocationDao locationDao();
 }

@@ -19,6 +19,8 @@ public class InfectedToken extends Token {
     @ColumnInfo(name = "timestampMs")
     private float timestampMs;
 
+    public InfectedToken() {}
+
     public long getId() {
         return id;
     }
