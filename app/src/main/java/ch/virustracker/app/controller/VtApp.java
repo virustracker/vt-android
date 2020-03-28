@@ -10,16 +10,18 @@ public class VtApp extends Application {
 
     private Model model;
     private static VtApp instance;
+    private Controller controller;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
         this.model = new Model();
+        this.controller = new Controller();
     }
 
     public static Context getContext() {
-        return instance.getContext();
+        return instance;
     }
 
     public static Model getModel() {
@@ -34,5 +36,9 @@ public class VtApp extends Application {
 
     public static String string(int id) {
         return getContext().getString(id);
+    }
+
+    public static Controller getController() {
+        return instance.controller;
     }
 }

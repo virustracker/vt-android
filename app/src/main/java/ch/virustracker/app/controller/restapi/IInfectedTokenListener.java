@@ -1,4 +1,4 @@
-package ch.virustracker.app.controller;
+package ch.virustracker.app.controller.restapi;
 
 public interface IInfectedTokenListener {
 

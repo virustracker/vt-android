@@ -13,7 +13,7 @@ import ch.virustracker.app.model.database.advertisedtoken.AdvertisedTokenDao;
 import ch.virustracker.app.model.database.receivedtoken.ReceivedToken;
 import ch.virustracker.app.model.database.receivedtoken.ReceivedTokenDao;
 
-@Database(entities = {AdvertisedToken.class, ReceivedToken.class, InfectedToken.class, Location.class}, version = 1, exportSchema = false)
+@Database(entities = {AdvertisedToken.class, ReceivedToken.class, InfectedToken.class, Location.class}, version = 2, exportSchema = false)
 public abstract class VtDatabase extends RoomDatabase {
 
     /** The only instance */
