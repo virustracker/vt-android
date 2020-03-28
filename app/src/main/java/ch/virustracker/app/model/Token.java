@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 import androidx.annotation.Nullable;
 
-public class Token {
+public abstract class Token {
 
     public static byte[] SALT = "virustracker".getBytes(StandardCharsets.US_ASCII);
     public static int PREIMAGE_LENGTH = 32;
@@ -37,7 +37,7 @@ public class Token {
         this.slot = slot;
     }
 
-    public String getTokenValue() {return "";}
+    public abstract String getTokenValue();
 
     public void setTokenValue(String tokenValue) {}
 
