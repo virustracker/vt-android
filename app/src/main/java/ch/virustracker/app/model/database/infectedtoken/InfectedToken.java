@@ -1,44 +1,30 @@
 package ch.virustracker.app.model.database.infectedtoken;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
+import com.google.gson.annotations.SerializedName;
+
 import ch.virustracker.app.model.Token;
 
-@Entity(indices = {@Index(value = {"tokenValue", "timestampMs"}, unique = true)})
 public class InfectedToken extends Token {
 
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(index = true, name = "id")
-    private long id;
+    public static final String SELF_REPORTED = "SELF_REPORTED";
+    public static final String VERIFIED = "VERIFIED";
 
-    @ColumnInfo(name = "tokenValue")
+    @SerializedName("value")
     private String tokenValue;
 
-    @ColumnInfo(name = "timestampMs")
-    private float timestampMs;
-
-    public InfectedToken() {}
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    @SerializedName("type")
+    private String reportType;
 
     public void setTokenValue(String tokenValue) {
         this.tokenValue = tokenValue;
     }
 
-    public float getTimestampMs() {
-        return timestampMs;
+    public String getReportType() {
+        return reportType;
     }
 
-    public void setTimestampMs(float timestampMs) {
-        this.timestampMs = timestampMs;
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
     }
 
     @Override

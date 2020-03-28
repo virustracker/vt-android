@@ -1,5 +1,4 @@
 <resources>
     <string name="app_name">VirusTracker</string>
-    <string name="api_base_url">http://europe-west1-fabled-emissary-272419.cloudfunctions.net/</string>
-    <string name="api_endpoint_infected_tokens">tokens</string>
+    <string name="api_base_url">https://europe-west1-fabled-emissary-272419.cloudfunctions.net/</string>
 </resources>
