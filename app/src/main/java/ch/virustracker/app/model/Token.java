@@ -1,5 +1,7 @@
 package ch.virustracker.app.model;
 
+import org.apache.commons.codec.binary.Hex;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -14,16 +16,18 @@ public abstract class Token {
 
     private long slot;
 
-    public Token() {}
+    public Token() {
+        super();
+    }
 
     public Token(byte[] preImage, long timestampMs) {
         assert(preImage.length == PREIMAGE_LENGTH);
         slot = timestampMs/ROTATE_INTERVAL_MS;
         try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA256");
+            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.update(SALT);
             messageDigest.update(preImage);
-            setTokenValue(new String(messageDigest.digest(), StandardCharsets.US_ASCII));
+            setTokenValue(Hex.encodeHexString(messageDigest.digest()));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -39,7 +43,7 @@ public abstract class Token {
 
     public abstract String getTokenValue();
 
-    public void setTokenValue(String tokenValue) {}
+    public abstract void setTokenValue(String tokenValue);
 
     @Override
     public int hashCode() {
@@ -51,4 +55,5 @@ public abstract class Token {
         if (obj == null) return false;
         return getTokenValue().equals(obj);
     }
+
 }

@@ -62,4 +62,8 @@ public class AdvertisedToken extends Token {
     public String getTokenValue() {
         return tokenValue;
     }
+
+    public boolean hasExpiredAt(long timestampMs) {
+        return timestampMs >= getSlot()*ROTATE_INTERVAL_MS + ROTATE_INTERVAL_MS;
+    }
 }

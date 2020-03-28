@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import ch.virustracker.app.model.Model;
+import ch.virustracker.app.model.database.VtDatabase;
 
 public class VtApp extends Application {
 
@@ -23,6 +24,12 @@ public class VtApp extends Application {
 
     public static Model getModel() {
         return instance.model;
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        VtDatabase.closeDb();
     }
 
     public static String string(int id) {

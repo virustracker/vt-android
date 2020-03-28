@@ -39,8 +39,8 @@ public abstract class VtDatabase extends RoomDatabase {
         }
     }
 
-    public abstract AdvertisedTokenDao ownTokenDao();
-    public abstract ReceivedTokenDao seenTokenDao();
+    public abstract AdvertisedTokenDao advertisedTokenDao();
+    public abstract ReceivedTokenDao receivedTokenDao();
     public abstract InfectedTokenDao infectedTokenDao();
     public abstract LocationDao locationDao();
 }
