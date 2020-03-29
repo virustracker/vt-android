@@ -1,4 +1,4 @@
-package ch.virustracker.app.model.database.servertoken;
+package ch.virustracker.app.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -17,13 +17,8 @@ public class ReportToken extends Token {
         this.testResult = testResult;
     }
 
-    @SerializedName("value")
-    private String tokenValue;
-
-    @SerializedName("type")
     private String reportType;
 
-    @SerializedName("testResult")
     private String testResult;
 
     public String getReportType() {

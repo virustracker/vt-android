@@ -9,7 +9,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 @Dao
-public interface AdvertisedTokenDao {
+public interface AdvertiseEventDao {
 
     @Query("SELECT * FROM AdvertiseEvent")
     List<AdvertiseEvent> selectAll();

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import ch.virustracker.app.model.database.servertoken.ReportToken;
+import ch.virustracker.app.model.database.reporttoken.ReportToken;
 
 public class InfectedTokenResponse {
 

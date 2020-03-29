@@ -7,7 +7,7 @@ import ch.virustracker.app.controller.p2pkit.P2PKitTrackerController;
 import ch.virustracker.app.controller.restapi.RestApiController;
 import ch.virustracker.app.model.database.VtDatabase;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
-import ch.virustracker.app.model.database.servertoken.ReportToken;
+import ch.virustracker.app.model.ReportToken;
 import ch.virustracker.app.model.proximityevent.IProximityEventProvider;
 
 public class Controller {

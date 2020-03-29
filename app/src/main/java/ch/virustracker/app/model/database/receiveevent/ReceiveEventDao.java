@@ -9,7 +9,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 @Dao
-public interface ReceivedTokenDao {
+public interface ReceiveEventDao {
 
     @Query("SELECT * FROM ReceiveEvent")
     List<ReceiveEvent> selectAll();
