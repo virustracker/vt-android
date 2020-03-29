@@ -19,7 +19,7 @@ public class P2PKitTrackerController implements ITrackerController {
 
     @Override
     public void startTracker() {
-        /*try {
+        try {
             P2PKit.enable(VtApp.getContext(), APP_KEY, statusListener);
         } catch (AlreadyEnabledException e) {
             e.printStackTrace();
@@ -31,7 +31,7 @@ public class P2PKitTrackerController implements ITrackerController {
             e.printStackTrace();
         } catch (DecoderException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 
     @Override
