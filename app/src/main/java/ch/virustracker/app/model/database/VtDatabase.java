@@ -12,7 +12,7 @@ import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
 import ch.virustracker.app.model.database.receiveevent.ReceivedTokenDao;
 import ch.virustracker.app.model.proximityevent.ProximityEvent;
 
-@Database(entities = {AdvertiseEvent.class, ReceiveEvent.class, ProximityEvent.class}, version = 2, exportSchema = false)
+@Database(entities = {AdvertiseEvent.class, ReceiveEvent.class, ProximityEvent.class}, version = 3, exportSchema = false)
 public abstract class VtDatabase extends RoomDatabase {
 
     /** The only instance */

@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.model = VtApp.getModel();
-
+        VtApp.getController().startTracking();
         initializeView();
     }
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         webView.setVisibility(View.GONE);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.addJavascriptInterface(new WebAppInterface(this), "Android"); // TODO: Should be webappinterface
-        webView.loadUrl("webappurl");
+        webView.loadUrl("https://polbyte.atthouse.pl/public/virus/");
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
