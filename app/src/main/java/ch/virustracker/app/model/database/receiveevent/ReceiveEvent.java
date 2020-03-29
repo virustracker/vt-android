@@ -5,6 +5,7 @@ import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
 import ch.virustracker.app.model.Token;
 import ch.virustracker.app.model.TokenEvent;
 import ch.virustracker.app.model.database.location.Location;

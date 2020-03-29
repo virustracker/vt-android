@@ -5,10 +5,10 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import ch.virustracker.app.controller.VtApp;
 import ch.virustracker.app.model.database.advertiseevent.AdvertiseEvent;
-import ch.virustracker.app.model.database.advertiseevent.AdvertisedTokenDao;
+import ch.virustracker.app.model.database.advertiseevent.AdvertiseEventDao;
 import ch.virustracker.app.model.database.proximityevent.ProximityEventDao;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
-import ch.virustracker.app.model.database.receiveevent.ReceivedTokenDao;
+import ch.virustracker.app.model.database.receiveevent.ReceiveEventDao;
 import ch.virustracker.app.model.proximityevent.ProximityEvent;
 
 @Database(entities = {AdvertiseEvent.class, ReceiveEvent.class, ProximityEvent.class}, version = 3, exportSchema = false)
@@ -37,7 +37,7 @@ public abstract class VtDatabase extends RoomDatabase {
         }
     }
 
-    public abstract AdvertisedTokenDao advertiseEventDao();
-    public abstract ReceivedTokenDao receivedTokenDao();
+    public abstract AdvertiseEventDao advertiseEventDao();
+    public abstract ReceiveEventDao receivedTokenDao();
     public abstract ProximityEventDao proximityEventDao();
 }

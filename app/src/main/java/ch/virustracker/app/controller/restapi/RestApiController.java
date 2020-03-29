@@ -1,5 +1,7 @@
 package ch.virustracker.app.controller.restapi;
 
+import android.util.Log;
+
 import java.io.IOException;
 
 import ch.virustracker.app.R;

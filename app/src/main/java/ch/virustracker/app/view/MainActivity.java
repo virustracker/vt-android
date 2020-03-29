@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.model = VtApp.getModel();
+        VtApp.getController().startTracking();
         initializeView();
     }
 
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         VtApp.getController().fetchNewInfections();;
-        VtApp.getController().startTracking();
     }
 
     private void initializeView() {

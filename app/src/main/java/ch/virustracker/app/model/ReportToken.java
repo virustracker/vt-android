@@ -1,5 +1,9 @@
 package ch.virustracker.app.model;
 
+import com.google.gson.annotations.SerializedName;
+
+import ch.virustracker.app.model.Token;
+
 // Represents a token obtained from the server that corresponds to a test result that was
 // uploaded to the server.
 public class ReportToken extends Token {

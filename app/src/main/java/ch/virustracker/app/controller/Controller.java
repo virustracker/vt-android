@@ -7,14 +7,14 @@ import ch.virustracker.app.controller.p2pkit.P2PKitTrackerController;
 import ch.virustracker.app.controller.restapi.RestApiController;
 import ch.virustracker.app.model.database.VtDatabase;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
-import ch.virustracker.app.model.database.servertoken.ReportToken;
-import ch.virustracker.app.model.proximityevent.IProximityEventProvider;
+import ch.virustracker.app.model.ReportToken;
+import ch.virustracker.app.model.proximityevent.IProximityEventResolver;
 
 public class Controller {
 
     private static final long SEARCH_BACKTIME_MS = 1000 * 60 * 60 * 24 * 20; // search the last 20 days for infected tokens
     private final RestApiController restApiController;
-    private IProximityEventProvider proximityEventProvider;
+    private IProximityEventResolver proximityEventProvider;
     private ITrackerController trackerController = new P2PKitTrackerController();
 
     public Controller() {
