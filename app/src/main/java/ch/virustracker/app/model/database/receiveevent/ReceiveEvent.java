@@ -80,5 +80,4 @@ public class ReceiveEvent implements TokenEvent {
     public Token getToken() {
         return new Token(tokenValue);
     }
-
 }

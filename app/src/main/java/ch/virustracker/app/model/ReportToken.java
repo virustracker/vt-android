@@ -15,10 +15,10 @@ public class ReportToken {
     public static final String NEGATIVE = "NEGATIVE";
     public static final String UNKNOWN = "UNKNOWN";
 
-    public ReportToken(String tokenValue, String reportType, String testResult) {
+    public ReportToken(String tokenValue, String testResult, String reportType) {
         this.token = new Token(tokenValue);
-        this.reportType = reportType;
         this.testResult = testResult;
+        this.reportType = reportType;
     }
 
     private Token token;
