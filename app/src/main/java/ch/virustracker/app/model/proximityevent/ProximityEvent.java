@@ -1,9 +1,12 @@
 package ch.virustracker.app.model.proximityevent;
 
 import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import ch.virustracker.app.model.database.location.Location;
 
 @Entity(indices = {@Index(value = {"timestampMs"})})
 public class ProximityEvent {
@@ -15,17 +18,20 @@ public class ProximityEvent {
     @ColumnInfo(name = "distance")
     private String distance;
 
-    @ColumnInfo(name = "timestampMs")
-    private long timestampMs;
-
     @ColumnInfo(name = "durationMs")
     private long durationMs;
 
-    @ColumnInfo(name = "infectionState")
-    private String infectionState;
+    @ColumnInfo(name = "timestampMs")
+    private long timestampMs;
 
-    @ColumnInfo(name = "confidentialEncounter")
-    private boolean confidentialEncounter;
+    @ColumnInfo(name = "eventType")
+    private String eventType;
+
+    @ColumnInfo(name = "testResult")
+    private String testResult;
+
+    @Embedded
+    private Location location;
 
     public String getDistance() {
         return distance;
@@ -33,14 +39,6 @@ public class ProximityEvent {
 
     public void setDistance(String distance) {
         this.distance = distance;
-    }
-
-    public long getTimestampMs() {
-        return timestampMs;
-    }
-
-    public void setTimestampMs(long timestampMs) {
-        this.timestampMs = timestampMs;
     }
 
     public long getDurationMs() {
@@ -51,20 +49,36 @@ public class ProximityEvent {
         this.durationMs = durationMs;
     }
 
-    public String getInfectionState() {
-        return infectionState;
+    public long getTimestampMs() {
+        return timestampMs;
     }
 
-    public void setInfectionState(String infectionState) {
-        this.infectionState = infectionState;
+    public void setTimestampMs(long timestampMs) {
+        this.timestampMs = timestampMs;
     }
 
-    public boolean isConfidentialEncounter() {
-        return confidentialEncounter;
+    public String getEventType() {
+        return eventType;
     }
 
-    public void setConfidentialEncounter(boolean confidentialEncounter) {
-        this.confidentialEncounter = confidentialEncounter;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public void setTestResult(String testResult) {
+        this.testResult = testResult;
+    }
+
+    public String getTestResult() {
+        return testResult;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
     public long getId() {

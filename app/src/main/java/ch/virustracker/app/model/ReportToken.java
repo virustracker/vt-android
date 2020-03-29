@@ -6,20 +6,30 @@ import ch.virustracker.app.model.Token;
 
 // Represents a token obtained from the server that corresponds to a test result that was
 // uploaded to the server.
-public class ReportToken extends Token {
+public class ReportToken {
 
     public static final String SELF_REPORTED = "SELF_REPORTED";
     public static final String VERIFIED = "VERIFIED";
 
+    public static final String POSITIVE = "POSITIVE";
+    public static final String NEGATIVE = "NEGATIVE";
+    public static final String UNKNOWN = "UNKNOWN";
+
     public ReportToken(String tokenValue, String reportType, String testResult) {
-        super(tokenValue);
+        this.token = new Token(tokenValue);
         this.reportType = reportType;
         this.testResult = testResult;
     }
 
+    private Token token;
+
     private String reportType;
 
     private String testResult;
+
+    public Token getToken() {
+        return token;
+    }
 
     public String getReportType() {
         return reportType;
