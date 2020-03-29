@@ -4,14 +4,14 @@ import java.util.List;
 
 import ch.virustracker.app.model.database.VtDatabase;
 import ch.virustracker.app.model.database.advertiseevent.AdvertiseEvent;
-import ch.virustracker.app.model.proximityevent.IProximityEventResolver;
+import ch.virustracker.app.model.proximityevent.IProximityEventProvider;
 import ch.virustracker.app.model.proximityevent.ProximityEvent;
 
 public class Model {
 
     public static final long ROTATE_INTERVAL_MS = 5 * 60 * 1000;  // Rotate token every 5 minutes
 
-    private IProximityEventResolver proximityEventProvider;
+    private IProximityEventProvider proximityEventProvider;
     private AdvertiseEvent mostRecentAdvertiseEvent = null;
     // The last time a new token was randomly generated.
     private long lastNewTokenTimestampMs;

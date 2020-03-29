@@ -1,7 +1,5 @@
 package ch.virustracker.app.model.database.proximityevent;
 
-import androidx.room.TypeConverters;
-
 public class Distance {
 
     public static final String LOW_DIST = "LOW_DIST";

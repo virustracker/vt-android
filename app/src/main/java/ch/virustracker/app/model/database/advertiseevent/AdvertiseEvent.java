@@ -1,11 +1,5 @@
 package ch.virustracker.app.model.database.advertiseevent;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
-import androidx.room.Entity;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
 import org.apache.commons.codec.binary.Hex;
 
 import java.nio.charset.StandardCharsets;
@@ -13,6 +7,11 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
 import ch.virustracker.app.model.Token;
 import ch.virustracker.app.model.TokenEvent;
 import ch.virustracker.app.model.database.location.Location;
