@@ -56,8 +56,7 @@ public class DefaultProximityEventResolver implements IProximityEventResolver {
     private static long LONG_CONTACT_MS = 15 * 60 * 1000;  // 15min
 
     private int getDistanceInMeter(ReceiveEvent event) {
-        // TODO implement this reasonably.
-        return 10;
+        return (int) event.getDistanceMeter();
     }
 
     private ProximityEvent computeProximityEvent(Encounter encounter) {
