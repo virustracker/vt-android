@@ -20,7 +20,7 @@ import ch.virustracker.app.model.database.location.Location;
 @Entity(indices = {@Index(value = {"tokenValue", "timestampMs"}, unique = true)})
 public class AdvertiseEvent implements TokenEvent {
 
-    public static byte[] SALT = "virustracker".getBytes(StandardCharsets.US_ASCII);
+    public static byte[] SALT = "VIRUSTRACKER".getBytes(StandardCharsets.US_ASCII);
     public static int PREIMAGE_LENGTH = 32;
 
     @PrimaryKey(autoGenerate = true)
