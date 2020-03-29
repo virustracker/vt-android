@@ -134,15 +134,17 @@ public class DefaultProximityEventResolver implements IProximityEventResolver {
     public List<ProximityEvent> resolveProximityEvents(List<ReceiveEvent> receiveEvents,
                                                        List<ReportToken> reportTokens) {
         // Group all ReportTokens by the token so we can easily look them up.
-        Map<Token, ReportToken> reportTokenMap = new HashMap<>();
+        Map<Token, ReportToken> positiveTokenMap = new HashMap<>();
         for (ReportToken reportToken : reportTokens) {
-            reportTokenMap.put(reportToken.getToken(), reportToken);
+            if (reportToken.getTestResult().equals(ReportToken.POSITIVE)) {
+                positiveTokenMap.put(reportToken.getToken(), reportToken);
+            }
         }
 
         // Keep only ReceiveEvents with a matching ReportToken and group them together.
         List<ContactEvent> contactEvents = new LinkedList<>();
         for (ReceiveEvent event : receiveEvents) {
-            ReportToken reportToken = reportTokenMap.get(event.getToken());
+            ReportToken reportToken = positiveTokenMap.get(event.getToken());
             if (reportToken == null) {
                 continue;
             }
