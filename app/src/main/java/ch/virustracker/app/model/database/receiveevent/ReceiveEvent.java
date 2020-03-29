@@ -28,8 +28,7 @@ public class ReceiveEvent implements TokenEvent {
     @ColumnInfo(name = "timestampMs")
     private long timestampMs;
 
-    // The strength of the signal through which the token was received. This can be used later on
-    // to determine the proximity of sender and receiver.
+    // Distance to the sender of the token. Estimated through signal strength and device parameters.
     @ColumnInfo(name = "distanceMeter")
     private float distanceMeter;
 
@@ -38,6 +37,11 @@ public class ReceiveEvent implements TokenEvent {
     public Location location;
 
     public ReceiveEvent() {
+    }
+
+    public ReceiveEvent(String tokenValue, long timestampMs) {
+        this.tokenValue = tokenValue;
+        this.timestampMs = timestampMs;
     }
 
     public long getId() {
