@@ -27,8 +27,8 @@ public class ReceiveEvent implements TokenEvent {
 
     // The strength of the signal through which the token was received. This can be used later on
     // to determine the proximity of sender and receiver.
-    @ColumnInfo(name = "signalStrength")
-    private long signalStrength;
+    @ColumnInfo(name = "distanceMeter")
+    private float distanceMeter;
 
     // The location of the device at the time of the event.
     @Embedded
@@ -68,12 +68,12 @@ public class ReceiveEvent implements TokenEvent {
 
     public void setLocation(Location location) { this.location = location; }
 
-    public long getSignalStrength() {
-        return signalStrength;
+    public float getDistanceMeter() {
+        return distanceMeter;
     }
 
-    public void setSignalStrength(long signalStrength) {
-        this.signalStrength = signalStrength;
+    public void setDistanceMeter(float distanceMeter) {
+        this.distanceMeter = distanceMeter;
     }
 
     @Override

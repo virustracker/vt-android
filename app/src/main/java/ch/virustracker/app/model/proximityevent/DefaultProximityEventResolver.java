@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import ch.uepaa.p2pkit.P2PKit;
 import ch.virustracker.app.model.Model;
 import ch.virustracker.app.model.ReportToken;
 import ch.virustracker.app.model.Token;
@@ -39,8 +40,7 @@ public class DefaultProximityEventResolver implements IProximityEventResolver {
     private static long LONG_CONTACT_MS = 15 * 60 * 1000;  // 15min
 
     private int getDistanceInMeter(ReceiveEvent event) {
-        // TODO implement this reasonably.
-        return 10;
+        return (int) event.getDistanceMeter();
     }
 
     private ProximityEvent computeProximityEvent(Encounter encounter) {

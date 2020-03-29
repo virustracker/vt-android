@@ -27,7 +27,7 @@ public class RestApiController {
                 try {
                     InfectedTokenResponse infectedTokenList = service.getInfectedTokens().execute().body();
                     VtApp.getController().onNewInfectedTokens(infectedTokenList.tokens);
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

@@ -1,5 +1,7 @@
 package ch.virustracker.app.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -18,21 +20,21 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import ch.virustracker.app.R;
 import ch.virustracker.app.controller.VtApp;
 import ch.virustracker.app.model.Model;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ValueCallback<Uri[]> mFilePathCallback;
-    private Model model;
+    private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 12246;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        this.model = VtApp.getModel();
         VtApp.getController().startTracking();
         initializeView();
     }
@@ -40,14 +42,24 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        VtApp.getController().fetchNewInfections();;
+        VtApp.getController().fetchNewInfections();
+        checkPermissions();
+    }
+
+    private void checkPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
     }
 
     private void initializeView() {
         WebView webView = (WebView) findViewById(R.id.webview);
         webView.setVisibility(View.GONE);
         webView.setBackgroundColor(Color.TRANSPARENT);
-        webView.addJavascriptInterface(new WebAppInterface(this), "Android"); // TODO: Should be webappinterface
+        webView.addJavascriptInterface(new WebAppInterface(this, webView), "Android"); // TODO: Should be webappinterface
         webView.loadUrl("https://polbyte.atthouse.pl/public/virus/");
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
