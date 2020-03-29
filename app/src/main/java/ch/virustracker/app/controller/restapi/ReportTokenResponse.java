@@ -6,7 +6,7 @@ import java.util.List;
 
 import ch.virustracker.app.model.ReportToken;
 
-public class InfectedTokenResponse {
+public class ReportTokenResponse {
     @SerializedName("tokens")
     public List<ReportToken> tokens;
 }

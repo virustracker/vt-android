@@ -1,9 +1,5 @@
 package ch.virustracker.app.controller.restapi;
 
-import android.util.Log;
-
-import java.io.IOException;
-
 import ch.virustracker.app.R;
 import ch.virustracker.app.controller.VtApp;
 import retrofit.GsonConverterFactory;
@@ -19,14 +15,14 @@ public class RestApiController {
         service = retrofit.create(RestApiService.class);
     }
 
-    public void fetchInfectedTokens(final IInfectedTokenListener infectedTokenlistener) {
+    public void fetchReportTokens(final IReportTokenListener reportTokenlistener) {
 
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    InfectedTokenResponse infectedTokenList = service.getInfectedTokens().execute().body();
-                    VtApp.getController().onNewInfectedTokens(infectedTokenList.tokens);
+                    ReportTokenResponse reportTokenResponse = service.getReportTokens().execute().body();
+                    VtApp.getController().onNewReportTokens(reportTokenResponse.tokens);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

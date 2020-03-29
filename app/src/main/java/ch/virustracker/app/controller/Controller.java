@@ -22,10 +22,10 @@ public class Controller {
     }
 
     public void fetchNewInfections() {
-        restApiController.fetchInfectedTokens(null);
+        restApiController.fetchReportTokens(null);
     }
 
-    public void onNewInfectedTokens(List<ReportToken> reportTokenList) {
+    public void onNewReportTokens(List<ReportToken> reportTokenList) {
         List<ReceiveEvent> seenTokens = VtDatabase.getInstance().receivedTokenDao().selectByTimeSpan(System.currentTimeMillis() - SEARCH_BACKTIME_MS, System.currentTimeMillis());
         //proximityEventProvider.getProximityEvents(seenTokens, infectedTokenList);
     }
