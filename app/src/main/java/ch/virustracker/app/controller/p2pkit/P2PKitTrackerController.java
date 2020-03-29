@@ -8,11 +8,12 @@ import ch.uepaa.p2pkit.P2PKit;
 import ch.uepaa.p2pkit.P2PKitStatusListener;
 import ch.uepaa.p2pkit.discovery.DiscoveryInfoTooLongException;
 import ch.uepaa.p2pkit.discovery.DiscoveryPowerMode;
+import ch.virustracker.app.BuildConfig;
 import ch.virustracker.app.controller.VtApp;
 
 public class P2PKitTrackerController implements ITrackerController {
 
-    private static final String APP_KEY = "SECRET";
+    private static final String APP_KEY = BuildConfig.p2pkitkey;
 
     private final P2PKitStatusListener statusListener = new P2PStatusListener();
     private final P2PKitDiscoveryListener discoveryListener = new P2PKitDiscoveryListener();
