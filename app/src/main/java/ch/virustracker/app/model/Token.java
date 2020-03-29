@@ -1,6 +1,9 @@
 package ch.virustracker.app.model;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import java.util.Objects;
 
 // Represents the basic abstraction of a token that only has a token value (the information that is
 // communicated between two clients) and can use that information to determine equality of two
@@ -16,15 +19,23 @@ public class Token {
     }
 
     @Override
-    public int hashCode() {
-        return getTokenValue().hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Token token = (Token) o;
+        return tokenValue.equals(token.tokenValue);
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) {
-        if (obj == null) return false;
-        return getTokenValue().equals(obj);
+    public int hashCode() {
+        return Objects.hash(tokenValue);
     }
 
     private String tokenValue;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Token { tokenValue: " + getTokenValue() + " }";
+    }
 }

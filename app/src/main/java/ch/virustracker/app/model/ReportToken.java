@@ -38,4 +38,9 @@ public class ReportToken {
     public String getTestResult() {
         return testResult;
     }
+
+    public String toString() {
+        return "ReportToken { token: " + getToken() + ", testResult: " + getTestResult() + ", " +
+                "reportType: " + getReportType() + " }";
+    }
 }

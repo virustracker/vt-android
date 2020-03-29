@@ -1,5 +1,6 @@
 package ch.virustracker.app.model.proximityevent;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
@@ -24,8 +25,8 @@ public class ProximityEvent {
     @ColumnInfo(name = "timestampMs")
     private long timestampMs;
 
-    @ColumnInfo(name = "eventType")
-    private String eventType;
+    @ColumnInfo(name = "reportType")
+    private String reportType;
 
     @ColumnInfo(name = "testResult")
     private String testResult;
@@ -57,12 +58,12 @@ public class ProximityEvent {
         this.timestampMs = timestampMs;
     }
 
-    public String getEventType() {
-        return eventType;
+    public String getReportType() {
+        return reportType;
     }
 
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
+    public void setReportType(String reportType) {
+        this.reportType = reportType;
     }
 
     public void setTestResult(String testResult) {
@@ -87,5 +88,13 @@ public class ProximityEvent {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ProximityEvent { distance: " + getDistance() + ", durationMs: " + getDurationMs() +
+                ", timestampMs: " + getTimestampMs() + ", testResult: " + getTestResult() + ", " +
+                "reportType: " + getReportType() + " }";
     }
 }

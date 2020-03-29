@@ -1,15 +1,13 @@
 package ch.virustracker.app.model.proximityevent;
 
-import android.util.Pair;
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import ch.virustracker.app.model.Model;
 import ch.virustracker.app.model.ReportToken;
 import ch.virustracker.app.model.Token;
 import ch.virustracker.app.model.database.proximityevent.Distance;
@@ -25,12 +23,31 @@ class ContactEvent {
 
     public ReceiveEvent event;
     public ReportToken report;
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ContactEvent {\n  event: " + event + "\n  report: " + report + "\n}";
+    }
 }
 
 // Represents contacts between the user and another user that are close enough in time to each
 // other to be considered a single unit.
 class Encounter {
-    List<ContactEvent> events;
+    List<ContactEvent> events = new LinkedList<>();
+
+    @NonNull
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Encounter { events: [\n");
+        for (ContactEvent event : events) {
+            builder.append("  ").append(event).append(",\n");
+        }
+        builder.delete(builder.length()-2, builder.length());
+        builder.append("\n] }");
+        return builder.toString();
+    }
 }
 
 public class DefaultProximityEventResolver implements IProximityEventResolver {
@@ -61,7 +78,7 @@ public class DefaultProximityEventResolver implements IProximityEventResolver {
         long durationMs = lastEvent.event.getTimestampMs() - firstEvent.event.getTimestampMs();
         boolean longContact = durationMs < CLOSE_CONTACT_DISTANCE_METER;
         proximityEvent.setDurationMs(durationMs);
-        proximityEvent.setEventType(firstEvent.report.getReportType());
+        proximityEvent.setReportType(firstEvent.report.getReportType());
         proximityEvent.setTestResult(firstEvent.report.getTestResult());
         return proximityEvent;
     }

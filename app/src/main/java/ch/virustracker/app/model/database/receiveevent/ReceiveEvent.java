@@ -1,10 +1,13 @@
 package ch.virustracker.app.model.database.receiveevent;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import org.apache.commons.codec.binary.Hex;
 
 import ch.virustracker.app.model.Token;
 import ch.virustracker.app.model.TokenEvent;
@@ -66,7 +69,9 @@ public class ReceiveEvent implements TokenEvent {
         return null;
     }
 
-    public void setLocation(Location location) { this.location = location; }
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
     public long getSignalStrength() {
         return signalStrength;
@@ -79,5 +84,11 @@ public class ReceiveEvent implements TokenEvent {
     @Override
     public Token getToken() {
         return new Token(tokenValue);
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "ReceiveEvent { token: " + getToken() + ", timestampMs: " + getTimestampMs() + " }";
     }
 }

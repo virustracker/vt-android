@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ch.virustracker.app.model.ReportToken;
+import ch.virustracker.app.model.Token;
 import ch.virustracker.app.model.database.advertiseevent.AdvertiseEvent;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
 

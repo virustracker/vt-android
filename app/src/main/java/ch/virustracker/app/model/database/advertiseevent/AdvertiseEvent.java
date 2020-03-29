@@ -1,5 +1,6 @@
 package ch.virustracker.app.model.database.advertiseevent;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
@@ -44,7 +45,8 @@ public class AdvertiseEvent implements TokenEvent {
     public Location location;
 
     // Creates an empty event. Should only be used by the DAO layer.
-    public AdvertiseEvent() {}
+    public AdvertiseEvent() {
+    }
 
     // Generates a new token from the given preimage.
     public static AdvertiseEvent GenerateFromPreImage(byte[] preImage) {
@@ -117,5 +119,12 @@ public class AdvertiseEvent implements TokenEvent {
 
     public void setTimestampMs(long timestampMs) {
         this.timestampMs = timestampMs;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "AdvertiseEvent { preImage: " + Hex.encodeHexString(getPreImage()) + ", token: "
+                + getToken() + ", timestampMs: " + getTimestampMs() + " }";
     }
 }
