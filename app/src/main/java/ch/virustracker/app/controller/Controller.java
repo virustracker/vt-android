@@ -1,5 +1,13 @@
 package ch.virustracker.app.controller;
 
+import org.altbeacon.beacon.Beacon;
+import org.altbeacon.beacon.BeaconParser;
+import org.altbeacon.beacon.BeaconTransmitter;
+import org.altbeacon.beacon.Identifier;
+import org.apache.commons.codec.DecoderException;
+import org.apache.commons.codec.binary.Hex;
+
+import java.util.Arrays;
 import java.util.List;
 
 import ch.virustracker.app.controller.restapi.InfectedTokenResponse;
@@ -27,5 +35,30 @@ public class Controller {
     public void onNewInfectedTokens(List<InfectedToken> infectedTokenList) {
         List<ReceivedToken> seenTokens = VtDatabase.getInstance().receivedTokenDao().selectByTimeSpan(System.currentTimeMillis() - SEARCH_BACKTIME_MS, System.currentTimeMillis());
         //proximityEventProvider.getProximityEvents(seenTokens, infectedTokenList);
+    }
+
+    public void startTracking() {
+        byte[] tokenValue;
+        try {
+            tokenValue = Hex.decodeHex(VtApp.getModel().getCurrentlyAdvertisedToken().getTokenValue());
+            Beacon beacon = new Beacon.Builder()
+                    .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
+                    .setId2("1")
+                    .setId3("2")
+                    .setManufacturer(0x0118)
+                    .setTxPower(-59)
+                    .setDataFields(Arrays.asList(new Long[] {0l}))
+                    .build();
+            BeaconParser beaconParser = new BeaconParser()
+                    .setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25");
+            BeaconTransmitter beaconTransmitter = new BeaconTransmitter(VtApp.getContext(), beaconParser);
+            beaconTransmitter.startAdvertising(beacon);
+        } catch (DecoderException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopTracking() {
+
     }
 }
