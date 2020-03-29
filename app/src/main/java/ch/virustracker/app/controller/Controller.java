@@ -3,20 +3,17 @@ package ch.virustracker.app.controller;
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
 import org.altbeacon.beacon.BeaconTransmitter;
-import org.altbeacon.beacon.Identifier;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 
 import java.util.Arrays;
 import java.util.List;
 
-import ch.virustracker.app.controller.restapi.InfectedTokenResponse;
 import ch.virustracker.app.controller.restapi.RestApiController;
 import ch.virustracker.app.model.database.VtDatabase;
-import ch.virustracker.app.model.database.infectedtoken.InfectedToken;
-import ch.virustracker.app.model.database.receivedtoken.ReceivedToken;
+import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
+import ch.virustracker.app.model.database.servertoken.ReportToken;
 import ch.virustracker.app.model.proximityevent.IProximityEventProvider;
-import ch.virustracker.app.model.proximityevent.ProximityEvent;
 
 public class Controller {
 
@@ -32,15 +29,15 @@ public class Controller {
         restApiController.fetchInfectedTokens(null);
     }
 
-    public void onNewInfectedTokens(List<InfectedToken> infectedTokenList) {
-        List<ReceivedToken> seenTokens = VtDatabase.getInstance().receivedTokenDao().selectByTimeSpan(System.currentTimeMillis() - SEARCH_BACKTIME_MS, System.currentTimeMillis());
+    public void onNewInfectedTokens(List<ReportToken> reportTokenList) {
+        List<ReceiveEvent> seenTokens = VtDatabase.getInstance().receivedTokenDao().selectByTimeSpan(System.currentTimeMillis() - SEARCH_BACKTIME_MS, System.currentTimeMillis());
         //proximityEventProvider.getProximityEvents(seenTokens, infectedTokenList);
     }
 
     public void startTracking() {
         byte[] tokenValue;
         try {
-            tokenValue = Hex.decodeHex(VtApp.getModel().getCurrentlyAdvertisedToken().getTokenValue());
+            tokenValue = Hex.decodeHex(VtApp.getModel().getNewAdvertiseTokenEvent().getTokenValue());
             Beacon beacon = new Beacon.Builder()
                     .setId1("2f234454-cf6d-4a0f-adf2-f4911ba9ffa6")
                     .setId2("1")

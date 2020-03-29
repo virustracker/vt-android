@@ -1,50 +1,19 @@
 package ch.virustracker.app.model;
 
-
-import org.apache.commons.codec.binary.Hex;
-
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import androidx.annotation.Nullable;
 
-public abstract class Token {
-
-    public static byte[] SALT = "virustracker".getBytes(StandardCharsets.US_ASCII);
-    public static int PREIMAGE_LENGTH = 32;
-    public static final long ROTATE_INTERVAL_MS = 5*60*1000;  // Rotate token every 5 minutes
-
-    private long slot;
-
-    public Token() {
-        super();
+// Represents the basic abstraction of a token that only has a token value (the information that is
+// communicated between two clients) and can use that information to determine equality of two
+// tokens.
+public class Token {
+    public Token(String tokenValue) {
+        this.tokenValue = tokenValue;
     }
 
-    public Token(byte[] preImage, long timestampMs) {
-        assert(preImage.length == PREIMAGE_LENGTH);
-        slot = timestampMs/ROTATE_INTERVAL_MS;
-        try {
-            MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
-            messageDigest.update(SALT);
-            messageDigest.update(preImage);
-            setTokenValue(Hex.encodeHexString(messageDigest.digest()));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+    // Returns the token value of this token.
+    public String getTokenValue() {
+        return tokenValue;
     }
-
-    public long getSlot() {
-        return slot;
-    }
-
-    public void setSlot(long slot) {
-        this.slot = slot;
-    }
-
-    public abstract String getTokenValue();
-
-    public abstract void setTokenValue(String tokenValue);
 
     @Override
     public int hashCode() {
@@ -57,4 +26,5 @@ public abstract class Token {
         return getTokenValue().equals(obj);
     }
 
+    private String tokenValue;
 }

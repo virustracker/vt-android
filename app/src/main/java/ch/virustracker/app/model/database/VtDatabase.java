@@ -4,17 +4,15 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import ch.virustracker.app.controller.VtApp;
-import ch.virustracker.app.model.database.advertisedtoken.AdvertisedToken;
-import ch.virustracker.app.model.database.advertisedtoken.AdvertisedTokenDao;
-import ch.virustracker.app.model.database.infectedtoken.InfectedToken;
+import ch.virustracker.app.model.database.advertiseevent.AdvertiseEvent;
+import ch.virustracker.app.model.database.advertiseevent.AdvertisedTokenDao;
 import ch.virustracker.app.model.database.location.Location;
-import ch.virustracker.app.model.database.location.LocationDao;
 import ch.virustracker.app.model.database.proximityevent.ProximityEventDao;
-import ch.virustracker.app.model.database.receivedtoken.ReceivedToken;
-import ch.virustracker.app.model.database.receivedtoken.ReceivedTokenDao;
+import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
+import ch.virustracker.app.model.database.receiveevent.ReceivedTokenDao;
 import ch.virustracker.app.model.proximityevent.ProximityEvent;
 
-@Database(entities = {AdvertisedToken.class, ReceivedToken.class, Location.class, ProximityEvent.class}, version = 2, exportSchema = false)
+@Database(entities = {AdvertiseEvent.class, ReceiveEvent.class, ProximityEvent.class}, version = 2, exportSchema = false)
 public abstract class VtDatabase extends RoomDatabase {
 
     /** The only instance */
@@ -40,8 +38,7 @@ public abstract class VtDatabase extends RoomDatabase {
         }
     }
 
-    public abstract AdvertisedTokenDao advertisedTokenDao();
+    public abstract AdvertisedTokenDao advertiseEventDao();
     public abstract ReceivedTokenDao receivedTokenDao();
-    public abstract LocationDao locationDao();
     public abstract ProximityEventDao proximityEventDao();
 }

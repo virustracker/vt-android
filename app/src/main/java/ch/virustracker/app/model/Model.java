@@ -1,38 +1,45 @@
 package ch.virustracker.app.model;
 
 import java.util.List;
-import java.util.Random;
 
 import ch.virustracker.app.model.database.VtDatabase;
-import ch.virustracker.app.model.database.advertisedtoken.AdvertisedToken;
+import ch.virustracker.app.model.database.advertiseevent.AdvertiseEvent;
 import ch.virustracker.app.model.proximityevent.IProximityEventProvider;
 import ch.virustracker.app.model.proximityevent.ProximityEvent;
 
-import static ch.virustracker.app.model.Token.PREIMAGE_LENGTH;
-
 public class Model {
 
+    public static final long ROTATE_INTERVAL_MS = 5 * 60 * 1000;  // Rotate token every 5 minutes
+
     private IProximityEventProvider proximityEventProvider;
-    private AdvertisedToken currentlyAdvertisedToken = null;
+    private AdvertiseEvent mostRecentAdvertiseEvent = null;
+    // The last time a new token was randomly generated.
+    private long lastNewTokenTimestampMs;
 
     public List<ProximityEvent> getEncountersForTimeSpan(long fromTimeMs, long toTimeMs) {
         return VtDatabase.getInstance().proximityEventDao().selectByTimeSpan(fromTimeMs, toTimeMs);
     }
 
-    public AdvertisedToken getCurrentlyAdvertisedToken() {
-        long timestampMs = System.currentTimeMillis();
-        if (currentlyAdvertisedToken == null || currentlyAdvertisedToken.hasExpiredAt(timestampMs)) {
-            Random r = new Random();
-            byte[] preImage = new byte[PREIMAGE_LENGTH];
-            r.nextBytes(preImage);
-            currentlyAdvertisedToken = new AdvertisedToken(preImage, System.currentTimeMillis());
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    VtDatabase.getInstance().advertisedTokenDao().insertAll(currentlyAdvertisedToken);
-                }
-            }).start();
+    private boolean tokenHasExpired() {
+        return (System.currentTimeMillis() - lastNewTokenTimestampMs) > ROTATE_INTERVAL_MS;
+    }
+
+    // Creates a new event, creating a new token if the previous one has expired, and persists
+    // the event into the database.
+    public AdvertiseEvent getNewAdvertiseTokenEvent() {
+        if (mostRecentAdvertiseEvent == null || tokenHasExpired()) {
+            // Generate event with a new token.
+            mostRecentAdvertiseEvent = AdvertiseEvent.GenerateRandom();
+            lastNewTokenTimestampMs = System.currentTimeMillis();
+        } else {
+            // Generate event with the same token as before.
+            mostRecentAdvertiseEvent =
+                    AdvertiseEvent.GenerateFromPreImage(mostRecentAdvertiseEvent.getPreImage());
         }
-        return currentlyAdvertisedToken;
+
+        new Thread(() -> {
+            VtDatabase.getInstance().advertiseEventDao().insertAll(mostRecentAdvertiseEvent);
+        }).start();
+        return mostRecentAdvertiseEvent;
     }
 }
