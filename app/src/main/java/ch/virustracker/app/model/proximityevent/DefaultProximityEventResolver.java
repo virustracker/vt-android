@@ -54,7 +54,7 @@ class Encounter {
 
 public class DefaultProximityEventResolver implements IProximityEventResolver {
 
-    private static int CLOSE_CONTACT_DISTANCE_METER = 5;
+    private static int CLOSE_CONTACT_DISTANCE_METER = 6;
 
     private int getDistanceInMeter(ReceiveEvent event) {
         return (int) event.getDistanceMeter();
