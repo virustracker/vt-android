@@ -10,13 +10,13 @@ public class SubmitReportTokensData {
 
     @SerializedName("report")
     @Expose
-    private Report report;
+    private SubmitReport report;
 
-    public Report getReport() {
+    public SubmitReport getReport() {
         return report;
     }
 
-    public void setReport(Report report) {
+    public void setReport(SubmitReport report) {
         this.report = report;
     }
 

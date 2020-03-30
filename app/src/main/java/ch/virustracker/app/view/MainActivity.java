@@ -6,11 +6,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JsResult;
@@ -22,21 +19,14 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import org.altbeacon.beacon.BeaconConsumer;
-import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.MonitorNotifier;
-import org.altbeacon.beacon.Region;
-
 import ch.virustracker.app.R;
-import ch.virustracker.app.controller.PermissionRequester;
+import ch.virustracker.app.controller.androidpermissions.PermissionController;
 import ch.virustracker.app.controller.VtApp;
-import ch.virustracker.app.model.Model;
 
-public class MainActivity extends PermissionRequester {
+public class MainActivity extends PermissionController {
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 12246;
 

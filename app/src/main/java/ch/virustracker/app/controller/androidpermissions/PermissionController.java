@@ -1,4 +1,4 @@
-package ch.virustracker.app.controller;
+package ch.virustracker.app.controller.androidpermissions;
 
 import android.Manifest;
 import android.annotation.TargetApi;
@@ -11,7 +11,7 @@ import android.util.Log;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class PermissionRequester extends AppCompatActivity {
+public class PermissionController extends AppCompatActivity {
 
     protected static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
     private static final int PERMISSION_REQUEST_BACKGROUND_LOCATION = 2;

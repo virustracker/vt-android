@@ -1,4 +1,4 @@
-package ch.virustracker.app.controller.restapi.submitreport;
+package ch.virustracker.app.controller.restapi.getreports;
 
 import com.google.gson.annotations.SerializedName;
 

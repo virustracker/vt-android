@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Token sent into Report for POST /vt-server-token
  */
-public class Token {
+public class SubmitToken {
 
     @SerializedName("preimage")
     @Expose

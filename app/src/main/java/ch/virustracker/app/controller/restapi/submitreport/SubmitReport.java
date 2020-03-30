@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Report sent in the POST /vt-server-token
  */
-public class Report {
+public class SubmitReport {
 
     @SerializedName("type")
     @Expose
@@ -21,7 +21,7 @@ public class Report {
 
     @SerializedName("tokens")
     @Expose
-    private List<Token> tokens = new ArrayList<>();
+    private List<SubmitToken> tokens = new ArrayList<>();
 
     @SerializedName("attestation")
     @Expose
@@ -43,11 +43,11 @@ public class Report {
         this.result = result;
     }
 
-    public List<Token> getTokens() {
+    public List<SubmitToken> getTokens() {
         return tokens;
     }
 
-    public void setTokens(List<Token> tokens) {
+    public void setTokens(List<SubmitToken> tokens) {
         this.tokens = tokens;
     }
 

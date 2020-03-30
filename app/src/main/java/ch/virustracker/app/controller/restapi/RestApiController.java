@@ -2,7 +2,7 @@ package ch.virustracker.app.controller.restapi;
 
 import ch.virustracker.app.R;
 import ch.virustracker.app.controller.VtApp;
-import ch.virustracker.app.controller.restapi.submitreport.ReportTokenResponse;
+import ch.virustracker.app.controller.restapi.getreports.ReportTokenResponse;
 import ch.virustracker.app.controller.restapi.submitreport.SubmitReportTokensData;
 import retrofit.GsonConverterFactory;
 import retrofit.Retrofit;

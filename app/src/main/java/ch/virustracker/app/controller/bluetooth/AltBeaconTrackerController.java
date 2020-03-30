@@ -1,4 +1,4 @@
-package ch.virustracker.app.controller.altbeacon;
+package ch.virustracker.app.controller.bluetooth;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -22,15 +22,12 @@ import android.os.ParcelUuid;
 import android.util.Base64;
 import android.util.Log;
 
-import org.apache.commons.codec.binary.Hex;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
 import ch.virustracker.app.controller.VtApp;
-import ch.virustracker.app.controller.ITrackerController;
 import ch.virustracker.app.model.database.VtDatabase;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
 import ch.virustracker.app.view.MainActivity;

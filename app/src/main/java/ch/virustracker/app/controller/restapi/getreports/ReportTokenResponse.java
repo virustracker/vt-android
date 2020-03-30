@@ -1,11 +1,11 @@
-package ch.virustracker.app.controller.restapi.submitreport;
+package ch.virustracker.app.controller.restapi.getreports;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.virustracker.app.controller.restapi.submitreport.ApiReportToken;
+import ch.virustracker.app.controller.restapi.getreports.ApiReportToken;
 import ch.virustracker.app.model.ReportToken;
 
 public class ReportTokenResponse {

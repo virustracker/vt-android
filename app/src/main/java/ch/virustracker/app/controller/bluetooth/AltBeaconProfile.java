@@ -1,4 +1,4 @@
-package ch.virustracker.app.controller.altbeacon;
+package ch.virustracker.app.controller.bluetooth;
 
 /*
  * Copyright 2017, The Android Open Source Project
@@ -18,10 +18,8 @@ package ch.virustracker.app.controller.altbeacon;
 
 
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 
-import java.util.Calendar;
 import java.util.UUID;
 
 /**
