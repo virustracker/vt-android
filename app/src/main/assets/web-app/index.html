@@ -1,0 +1,172 @@
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="minimal-ui, width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-title" content="onlyWebPro" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<link rel="icon" href="img/favicon.ico">
+
+<link rel="stylesheet" href="css/onsenui.css">
+<link rel="stylesheet" href="css/onsen-css-components.min.css">
+<script src="js/onsenui.min.js"></script>
+<script src="js/jquery-latest.min.js"></script>
+
+<link rel="stylesheet" href="lib/font-awesome-pro-5-11-2/css/all.css">
+<script src="lib/bootstrap/bootbox.min.js"></script>
+
+<link href="css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="js/bootstrap.min.js"></script>
+
+<script src="js/signature_pad.umd.js"></script>
+<script src="js/file-picker.js"></script>
+<script src="js/scanner.js"></script>
+
+<link href="lib/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+<script src="lib/bootstrap-select/js/bootstrap-select.js"></script>
+<script src="lib/bootstrap-select/js/i18n/defaults-de_DE.min.js"></script>
+
+<script src="js/moment.js"></script>
+<script src="js/rest.js?2019070401"></script>
+<script src="js/image-preview.js"></script>
+<script src="js/NativeWeb.js"></script>
+
+<script src="js/ProximityEvent.js"></script>
+<script src="js/TokenEvent.js"></script>
+<script src="js/UserSettings.js"></script>
+
+<title>Virus Tracker</title>
+
+<style>
+    body {
+        background-color: #333;
+    }
+    * {
+        font-family: "Arial", sans-serif;
+    }
+    .toolbar {
+        background: rgb(0,204,168);
+        color: #fff !important;
+    }
+    .toolbar .center {
+        color: #fff;
+        text-align: center;
+        font-weight: 800;
+    }
+    .toolbar .toolbar-button {
+        color: #fff;
+    }
+    .button.button--large {
+        background-color: #5cb85c;
+    }
+    .button.button--quiet {
+        color: #5cb85c;
+        background: transparent;
+    }
+    .toolbar-button {
+        color: #5cb85c;
+    }
+    :checked+.tabbar__button {
+        color: rgb(0,204,168);
+    }
+    .back-button {
+        color: #fff;
+    }
+    .back-button__icon {
+        fill: #fff;
+    }
+    .toolbar-button--material {
+        padding-top: 18px;
+    }
+    #side-menu .page__background {
+        background-color: rgb(0,69,90);
+    }
+    #side-menu-row-list {
+        background-color: transparent;
+    }
+    #side-menu-row-list .list-item {
+        color: #fff;
+        font-size: 16px;
+    }
+    #pull-hook .progress-circular {
+        margin-top: 18px;
+    }
+    #pull-hook .progress-circular__secondary, .progress-circular__primary {
+        stroke: #555;
+    }
+    .button-wide {
+        width: 100%;
+        text-align: center;
+        background-color: #888;
+    }
+
+    #pull-hook-contracts .progress-circular {
+        margin-top: 18px;
+    }
+    #pull-hook-contracts .progress-circular__secondary, .progress-circular__primary {
+        stroke: #555;
+    }
+    input[type='radio'], input[type='checkbox'] {
+        outline: none !important;
+    }
+
+    .row-button {
+        background-color: #999;
+        line-height: 35px;
+        min-height: 35px;
+        text-align: center;
+    }
+    .row-button.outline {
+        background-color: transparent;
+        color: #555;
+        border: 2px solid #555;
+    }
+
+    .button--material {
+        line-height: 40px;
+    }
+
+    .onboarding-1 {
+        background: #fff url('img/onboarding/onboarding01.png') center no-repeat;
+        background-size: contain;
+        width: 100%;
+        height: 100%;
+    }
+
+    .onboarding-2 {
+        background: #fff url('img/onboarding/onboarding02.png') center no-repeat;
+        background-size: contain;
+        width: 100%;
+        height: 100%;
+    }
+
+    .onboarding-3 {
+        background: #fff url('img/onboarding/onboarding03.png') center no-repeat;
+        background-size: contain;
+        width: 100%;
+        height: 100%;
+    }
+
+</style>
+<script>
+
+    var restUrl = null;
+
+    var restClientMobile = new RESTClient();
+    restClientMobile.rootUrl = restUrl;
+
+    var restClientAttachmentMobile = new RESTClient();
+    restClientAttachmentMobile.rootUrl = restUrl;
+    restClientAttachmentMobile.isForFormData = true;
+
+    var nw = new NativeWeb();
+    nw.callbackEventBackButton = function() {
+        if (myNavigator) {
+            myNavigator.popPage();
+        }
+    };
+
+    window.onerror = function(error) {
+        nw.log(error);
+    };
+
+</script>
+
+<ons-navigator id="onboardingNavigator" page="./onboarding.html" animation="lift"></ons-navigator>

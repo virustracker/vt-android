@@ -1,0 +1,185 @@
+<ons-page id="dashboard-page">
+
+    <style>
+        .danger-title {
+            font-weight: 600;
+            color: #d00;
+        }
+        .warning-title {
+            font-weight: 600;
+            color: #d90;
+        }
+    </style>
+    <script>
+
+        // Vars
+
+        var eventList = [];
+        var tokenList = [];
+
+        document.addEventListener('init', function(event) {
+            if (event.target.matches('#dashboard-page')) {
+                setupPullHook();
+                $("#customer-list-progress-indicator-container").show();
+                reloadEventList(function() {
+                    $("#customer-list-progress-indicator-container").hide();
+                });
+            }
+        }, false);
+        ons.getScriptPage().onInit = function() {
+            this.onShow = function() {
+
+            };
+            this.onHide = function() {
+
+            };
+            this.onDestroy = function() {
+
+            };
+        };
+
+        function getCustomerList(callback) {
+            restClientMobile.sendRequest("GET", "/customerlist", null, function (responseObject) {
+                callback(responseObject['responseData']);
+            });
+        }
+
+        function reloadEventList(callback) {
+            nw.getProximityEventList(1, 2585490566, function(events, tokens) {
+                eventList = events;
+                tokenList = tokens;
+                refreshEventList();
+                if (callback) {
+                    callback();
+                }
+            });
+        }
+
+        var refreshTimeout = null;
+        function refreshEventList() {
+            if (refreshTimeout != null) {
+                clearTimeout(refreshTimeout);
+            }
+            var noDataRow = '<ons-list-item><div class="center"><span class="list-item__title" style="color: #bbb; text-align: center">No events available</span></div></ons-list-item>';
+            var rowDataMap = {};
+            if (tokenList) {
+                for (var i=0; i<tokenList.length; i++) {
+                    var token = tokenList[i];
+                    var timestamp = moment(token.timestamp).format("YYYY.MM.DD");
+                    var count = token.count;
+                    if (rowDataMap[timestamp] == null) {
+                        rowDataMap[timestamp] = {"date": timestamp, "tokenCount": count, "highRiskCount": 0, "lowRiskCount": 0};
+                    }
+                }
+            }
+            if (eventList) {
+                for (var i=0; i<eventList.length; i++) {
+                    var event = eventList[i];
+                    var timestamp = moment(event.timestamp).format("YYYY.MM.DD");
+                    nw.log(event.timestamp+" - "+timestamp);
+                    var isHighRisk = event.isHighRisk();
+                    if (rowDataMap[timestamp] == null) {
+                        rowDataMap[timestamp] = {"date": timestamp, "tokenCount": 0, "highRiskCount": 0, "lowRiskCount": 0};
+                    }
+                    if (isHighRisk) {
+                        rowDataMap[timestamp]["highRiskCount"] = rowDataMap[timestamp]["highRiskCount"] + 1;
+                    } else {
+                        rowDataMap[timestamp]["lowRiskCount"] = rowDataMap[timestamp]["lowRiskCount"] + 1;
+                    }
+                }
+            }
+            var rowDataList = [];
+            for (var key in rowDataMap) {
+                if (rowDataMap.hasOwnProperty(key)) {
+                    var pack = rowDataMap[key];
+                    rowDataList.push(pack);
+                }
+            }
+            rowDataList.sort(function(a, b) {
+                return b.date.localeCompare(a.date);
+            });
+            if (rowDataList) {
+                refreshTimeout = setTimeout(function() {
+                    var rowCode = "";
+                    var searchInputValue = $("#customer-list-search-input").val();
+                    for (var i=0; i<rowDataList.length; i++) {
+                        var row = rowDataList[i];
+                        if (searchInputValue == null) {
+
+                        }
+                        var icon = "fa-calendar-check";
+                        var color = "#000";
+                        if (row.highRiskCount > 0) {
+                            icon = "fa-calendar-exclamation";
+                            color = "#d00";
+                        }
+                        else if (row.lowRiskCount > 0) {
+                            icon = "fa-calendar-exclamation";
+                            color = "#c90";
+                        }
+                        rowCode += '<ons-list-item><div class="left"><div style="text-align: center; font-size: 28px; width: 80%;"><i class="fal '+icon+'" style="color: '+color+';"></i></div></div><div class="center"><span class="list-item__title">You had '+row.highRiskCount+' high risk and '+row.lowRiskCount+' low risk contacts<br>You were connected to '+row.tokenCount+' people that day</span><span class="list-item__subtitle">'+row.date+'</span></div></ons-list-item>';
+                    }
+                    if (rowCode.length == 0) {
+                        rowCode = noDataRow;
+                    }
+                    $("#event-list-container").html(rowCode);
+                }, 100);
+            } else {
+                $("#event-list-container").html(noDataRow);
+            }
+        }
+
+        function setupPullHook() {
+            var pullHook = document.getElementById('pull-hook');
+
+            pullHook.addEventListener('changestate', function(event) {
+                var message = '';
+
+                switch (event.state) {
+                    case 'initial':
+                        message = '<ons-progress-circular value="10" secondary-value="20"></ons-progress-circular>';
+                        break;
+                    case 'preaction':
+                        message = '<ons-progress-circular value="20" secondary-value="70"></ons-progress-circular>';
+                        break;
+                    case 'action':
+                        message = '<ons-progress-circular indeterminate></ons-progress-circular>';
+                        break;
+                }
+
+                pullHook.innerHTML = message;
+            });
+
+            pullHook.onAction = function(done) {
+                reloadEventList(function() {
+                    done();
+                });
+            };
+        }
+
+    </script>
+
+    <ons-pull-hook id="pull-hook">
+        Pull to refresh
+    </ons-pull-hook>
+
+    <div id="customer-list-progress-indicator-container" style="margin-top: 10px; margin-bottom: 10px; text-align: center;">
+        <ons-progress-circular indeterminate id="customer-list-progress-indicator"></ons-progress-circular>
+    </div>
+
+    <ons-list>
+
+        <ons-list-item style="padding-top: 5px; padding-right: 8px;">
+            <ons-search-input placeholder="Search" style="width: 100%" onkeydown="refreshCustomerList();" id="customer-list-search-input"></ons-search-input>
+        </ons-list-item>
+
+        <ons-list-header>Your status</ons-list-header>
+        <ons-list-item><div class="left"><div style="text-align: center; font-size: 28px; width: 80%;"><i class="fal fa-check"></i></div></div><div class="center"><span class="list-item__title">No institution marked you as infected</span><span class="list-item__subtitle">You did not mark yourself as infected</span></div></ons-list-item>
+
+        <ons-list-header>History</ons-list-header>
+
+        <div id="event-list-container"></div>
+
+    </ons-list>
+
+</ons-page>

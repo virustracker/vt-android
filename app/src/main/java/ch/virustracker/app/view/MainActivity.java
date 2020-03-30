@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JsResult;
 import android.webkit.PermissionRequest;
+import android.webkit.SslErrorHandler;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -71,7 +73,7 @@ public class MainActivity extends PermissionController {
         webView.setVisibility(View.GONE);
         webView.setBackgroundColor(Color.TRANSPARENT);
         webView.addJavascriptInterface(new WebAppInterface(this, webView), "Android"); // TODO: Should be webappinterface
-        webView.loadUrl("https://polbyte.atthouse.pl/public/virus/");
+        webView.loadUrl("file:///android_asset/web-app/index.html");
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
@@ -129,5 +131,7 @@ public class MainActivity extends PermissionController {
         webSettings.setJavaScriptEnabled(true);
         webSettings.setAllowFileAccess(true);
         webSettings.setAllowContentAccess(true);
+        webSettings.setAllowFileAccessFromFileURLs(true);
+        webSettings.getAllowUniversalAccessFromFileURLs();
     }
 }

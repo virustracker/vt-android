@@ -1,0 +1,98 @@
+<ons-page>
+    <script>
+
+        function syncAction() {
+            var dialog = document.getElementById("alert-dialog-logout");
+            if (dialog != null) {
+                dialog.show();
+            } else {
+                ons.createElement('alert-dialog-logout-template', { append: true }).then(function(dialog) {
+                    dialog.show();
+                });
+            }
+        }
+
+        function sync() {
+            nw.syncData();
+            closeSideMenu();
+        }
+
+        function openSideMenu() {
+            var menu = document.getElementById('side-menu');
+            menu.open();
+        }
+
+        function closeSideMenu() {
+            var menu = document.getElementById('side-menu');
+            menu.close();
+        }
+
+        function changeTabFromSideMenu(index) {
+            document.getElementById('main-tabbar').setActiveTab(index);
+            closeSideMenu();
+        }
+
+        function getLogout(callback) {
+            restClientMobile.sendRequest("GET", "/logout", null, function (responseObject) {
+                callback(responseObject['responseCode'], responseObject['responseData']);
+            });
+        }
+
+    </script>
+    <ons-splitter>
+        <ons-splitter-side id="side-menu" side="left" width="300px" collapse>
+            <ons-page>
+                <div style="width: 100%; height: 180px; padding-top: 25px; text-align: center; position: relative">
+                    <img id="account-logo" src="img/logo_small.png" alt="" width="auto" height="auto" style="max-height: 120px; max-width: 100%">
+                </div>
+                <ons-list id="side-menu-row-list">
+                    <ons-list-item onclick="changeTabFromSideMenu(0)" tappable>
+                        <i class="fa fa-dashboard" style="display: inline-block; width: 25px;"></i> Dashboard
+                    </ons-list-item>
+                    <ons-list-item onclick="changeTabFromSideMenu(1)" tappable>
+                        <i class="fa fa-cog" style="display: inline-block; width: 25px;"></i> Settings
+                    </ons-list-item>
+                </ons-list>
+                <ons-button class="logout-button" modifier="outline" onclick="syncAction();" style="position: absolute; bottom: 10px; left: 10px; right: 10px; font-weight: 700; text-align: center; color: #fff; border-color: #fff;"><i class="fa fa-sync"></i> Sync data</ons-button>
+            </ons-page>
+        </ons-splitter-side>
+        <ons-splitter-content>
+            <ons-navigator id="myNavigator">
+                <ons-page>
+                    <ons-toolbar class="toolbar">
+                        <div class="left">
+                            <ons-toolbar-button onclick="openSideMenu();">
+                                <i class="far fa-bars"></i>
+                            </ons-toolbar-button>
+                        </div>
+                        <div class="center">
+                            <img src="img/logo_small.png" height="90%" width="auto"> <span>virus tracker</span>
+                        </div>
+                        <div class="right">
+                            <ons-toolbar-button class="logout-button" onclick="syncAction();">
+                                <i class="far fa-sync"></i>
+                            </ons-toolbar-button>
+                        </div>
+                    </ons-toolbar>
+
+                    <ons-tabbar swipeable position="auto" id="main-tabbar">
+                        <ons-tab page="./dashboard.html" icon="ion-navicon" active-icon="ion-navicon" active></ons-tab>
+                        <ons-tab page="./settings.html" icon="ion-navicon" active-icon="ion-navicon"></ons-tab>
+                    </ons-tabbar>
+                </ons-page>
+            </ons-navigator>
+        </ons-splitter-content>
+    </ons-splitter>
+    <template id="alert-dialog-logout-template">
+        <ons-alert-dialog modifier="rowfooter" id="alert-dialog-logout">
+            <div class="alert-dialog-title">Data sync</div>
+            <div class="alert-dialog-content">
+                Would you like to sync data now?
+            </div>
+            <div class="alert-dialog-footer">
+                <ons-alert-dialog-button onclick="document.getElementById('alert-dialog-logout').hide();">Cancel</ons-alert-dialog-button>
+                <ons-alert-dialog-button onclick="document.getElementById('alert-dialog-logout').hide();sync();">Sync</ons-alert-dialog-button>
+            </div>
+        </ons-alert-dialog>
+    </template>
+</ons-page>

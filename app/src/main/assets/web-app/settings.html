@@ -1,0 +1,90 @@
+<ons-page id="settings-page">
+
+    <script>
+        var userSettings = new UserSettings();
+        document.addEventListener('init', function(event) {
+            if (event.target.matches('#settings-page')) {
+                document.getElementById('switch-share-data').addEventListener('change', function(e) {
+                    userSettings.shouldShareData = $('#switch-share-data input').is(':checked');
+                    nw.setUserSettings(userSettings);
+                });
+            }
+        }, false);
+        ons.getScriptPage().onInit = function() {
+            this.onShow = function() {
+                nw.getUserSettings(function(settings) {
+                    if (settings) {
+                        userSettings = settings;
+                    }
+                    if (userSettings.shouldShareData) {
+                        document.getElementById('switch-share-data').setAttribute('checked');
+                    } else {
+                        document.getElementById('switch-share-data').removeAttribute('checked');
+                    }
+                });
+            };
+            this.onHide = function() {
+
+            };
+            this.onDestroy = function() {
+
+            };
+        };
+        function openInfectionDialog() {
+            var dialog = document.getElementById('infection-request-dialog');
+            if (dialog) {
+                dialog.show();
+            } else {
+                ons.createElement('infection-request-dialog.html', { append: true }).then(function(dialog) {
+                    dialog.show();
+                });
+            }
+        }
+        function sendInfectionRequest() {
+            var days = $("#infection-dialog-days").val();
+            if (days && days.length > 0) {
+                nw.sendInfectionRequest(days, function(success) {
+                    if (success) {
+                        document.getElementById('infection-request-dialog').hide();
+                    } else {
+                        alert("There was a problem. Please check your network and try again.");
+                    }
+                });
+            }
+        }
+    </script>
+
+    <ons-list>
+
+        <ons-list-header>User settings</ons-list-header>
+        <ons-list-item>
+            <div class="center">
+                Should share data
+            </div>
+            <div class="right">
+                <ons-switch id="switch-share-data"></ons-switch>
+            </div>
+        </ons-list-item>
+        <ons-list-item>
+            <div class="center">
+                <ons-button onclick="openInfectionDialog();" style="width: 100%; text-align: center; background-color: rgb(0,69,90)"><i class="fal fa-envelope"></i> Send infection request</ons-button>
+            </div>
+        </ons-list-item>
+
+    </ons-list>
+
+    <template id="infection-request-dialog.html">
+        <ons-alert-dialog id="infection-request-dialog" modifier="rowfooter">
+            <div class="alert-dialog-title">Infection request</div>
+            <div class="alert-dialog-content">
+                Please specify how many days do you have the infection?
+                <ons-input modifier="material" id="infection-dialog-days"></ons-input>
+            </div>
+            <div class="alert-dialog-footer">
+                <ons-alert-dialog-button onclick="document.getElementById('infection-request-dialog').hide()">Cancel</ons-alert-dialog-button>
+                <ons-alert-dialog-button onclick="sendInfectionRequest();">Send</ons-alert-dialog-button>
+            </div>
+        </ons-alert-dialog>
+    </template>
+
+</ons-page>

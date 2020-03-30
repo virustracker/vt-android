@@ -1,0 +1,30 @@
+<ons-page>
+
+    <script>
+        ons.getScriptPage().onInit = function() {
+            this.onShow = function () {
+                nw.getUserSettings(function(settings) {
+                    if (settings) {
+                        if (settings.didFinishOnboarding) {
+                            setTimeout(function() {
+
+                            }, 1000);
+                            onboardingNavigator.pushPage("./panel.html");
+                        }
+                    }
+                });
+            };
+            this.onHide = function () {
+
+            };
+            this.onDestroy = function () {
+            }
+        };
+    </script>
+
+    <ons-tabbar swipeable id="onboarding-tabbar" hide-tabs>
+        <ons-tab page="./onboarding-1.html" icon="fa-users" active-icon="fa-users" active></ons-tab>
+        <ons-tab page="./onboarding-2.html" icon="fa-cog" active-icon="fa-cog"></ons-tab>
+        <ons-tab page="./onboarding-3.html" icon="fa-cog" active-icon="fa-cog"></ons-tab>
+    </ons-tabbar>
+</ons-page>
