@@ -10,6 +10,7 @@ import ch.uepaa.p2pkit.discovery.DiscoveryInfoTooLongException;
 import ch.uepaa.p2pkit.discovery.DiscoveryPowerMode;
 import ch.virustracker.app.BuildConfig;
 import ch.virustracker.app.controller.VtApp;
+import ch.virustracker.app.view.MainActivity;
 
 public class P2PKitTrackerController implements ITrackerController {
 
@@ -19,7 +20,7 @@ public class P2PKitTrackerController implements ITrackerController {
     private final P2PKitDiscoveryListener discoveryListener = new P2PKitDiscoveryListener();
 
     @Override
-    public void startTracker() {
+    public void startTracker(MainActivity mainActivity) {
         try {
             P2PKit.enable(VtApp.getContext(), APP_KEY, statusListener);
         } catch (AlreadyEnabledException e) {

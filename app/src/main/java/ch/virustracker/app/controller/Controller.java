@@ -6,6 +6,7 @@ import android.util.Log;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ch.virustracker.app.controller.altbeacon.AltBeaconTrackerController;
 import ch.virustracker.app.controller.p2pkit.ITrackerController;
 import ch.virustracker.app.controller.p2pkit.P2PKitTrackerController;
 import ch.virustracker.app.controller.restapi.RestApiController;
@@ -18,13 +19,14 @@ import ch.virustracker.app.model.database.location.Location;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
 import ch.virustracker.app.model.ReportToken;
 import ch.virustracker.app.model.proximityevent.IProximityEventResolver;
+import ch.virustracker.app.view.MainActivity;
 
 public class Controller {
 
     private static final long SEARCH_BACKTIME_MS = 1000 * 60 * 60 * 24 * 20; // search the last 20 days for infected tokens
     private final RestApiController restApiController;
     private IProximityEventResolver proximityEventProvider;
-    private ITrackerController trackerController = new P2PKitTrackerController();
+    private ITrackerController trackerController = new AltBeaconTrackerController();
 
     public Controller() {
         this.restApiController = new RestApiController();
@@ -39,8 +41,8 @@ public class Controller {
         //proximityEventProvider.getProximityEvents(seenTokens, infectedTokenList);
     }
 
-    public void startTracking() {
-        trackerController.startTracker();
+    public void startTracking(MainActivity mainActivity) {
+        trackerController.startTracker(mainActivity);
     }
 
     public void stopTracking() {

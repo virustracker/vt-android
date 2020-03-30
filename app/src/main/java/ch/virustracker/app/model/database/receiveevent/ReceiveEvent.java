@@ -39,11 +39,11 @@ public class ReceiveEvent implements TokenEvent {
     public ReceiveEvent() {
     }
 
-    public ReceiveEvent(String tokenValue, long timestampMs) {
+    public ReceiveEvent(long timestampMs, String tokenValue, float distance) {
         this.tokenValue = tokenValue;
         this.timestampMs = timestampMs;
+        this.distanceMeter = distance;
     }
-
     public long getId() {
         return id;
     }

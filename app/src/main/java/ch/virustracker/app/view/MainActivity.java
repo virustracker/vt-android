@@ -6,8 +6,11 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.ConsoleMessage;
 import android.webkit.HttpAuthHandler;
 import android.webkit.JsResult;
@@ -23,10 +26,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import ch.virustracker.app.R;
-import ch.virustracker.app.controller.VtApp;
+import org.altbeacon.beacon.BeaconConsumer;
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.MonitorNotifier;
+import org.altbeacon.beacon.Region;
 
-public class MainActivity extends AppCompatActivity {
+import ch.virustracker.app.R;
+import ch.virustracker.app.controller.PermissionRequester;
+import ch.virustracker.app.controller.VtApp;
+import ch.virustracker.app.model.Model;
+
+public class MainActivity extends PermissionRequester {
 
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 12246;
 
@@ -34,8 +44,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        VtApp.getController().startTracking();
+        VtApp.getController().startTracking(this);
         initializeView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        VtApp.getController().stopTracking();
     }
 
     @Override
@@ -51,6 +67,12 @@ public class MainActivity extends AppCompatActivity {
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
         }
     }
 
