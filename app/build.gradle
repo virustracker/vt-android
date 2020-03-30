@@ -1,9 +1,5 @@
 apply plugin: 'com.android.application'
 
-def apikeyPropertiesFile = rootProject.file("apikeys.properties");
-def apikeyProperties = new Properties()
-apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
-
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -14,7 +10,6 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "p2pkitkey", apikeyProperties['p2pkitkey'])
     }
     buildTypes {
         release {
@@ -39,8 +34,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation group: 'com.konghq', name: 'unirest-java', version: '3.7.00'
     implementation 'org.altbeacon:android-beacon-library:2+'
-    // p2pkit
-    implementation 'ch.uepaa.p2p:p2pkit-android:2.1.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

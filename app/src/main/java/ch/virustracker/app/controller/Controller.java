@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import ch.virustracker.app.controller.altbeacon.AltBeaconTrackerController;
-import ch.virustracker.app.controller.p2pkit.ITrackerController;
 import ch.virustracker.app.controller.restapi.RestApiController;
 import ch.virustracker.app.controller.restapi.dao.SubmitReportTokensData;
 import ch.virustracker.app.model.ReportToken;
@@ -18,6 +17,7 @@ import ch.virustracker.app.view.MainActivity;
 public class Controller {
 
     private static final long SEARCH_BACKTIME_MS = 1000 * 60 * 60 * 24 * 20; // search the last 20 days for infected tokens
+
     private final RestApiController restApiController;
     private IProximityEventResolver proximityEventResolver;
     private ITrackerController trackerController = new AltBeaconTrackerController();

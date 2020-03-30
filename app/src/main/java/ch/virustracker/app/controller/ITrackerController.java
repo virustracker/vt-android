@@ -1,4 +1,4 @@
-package ch.virustracker.app.controller.p2pkit;
+package ch.virustracker.app.controller;
 
 import ch.virustracker.app.view.MainActivity;
 
