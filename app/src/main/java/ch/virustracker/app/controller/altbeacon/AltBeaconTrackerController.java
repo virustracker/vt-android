@@ -19,6 +19,7 @@ import android.bluetooth.le.ScanFilter;
 import android.bluetooth.le.ScanResult;
 import android.bluetooth.le.ScanSettings;
 import android.os.ParcelUuid;
+import android.util.Base64;
 import android.util.Log;
 
 import org.apache.commons.codec.binary.Hex;
@@ -26,6 +27,7 @@ import org.apache.commons.codec.binary.Hex;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import ch.virustracker.app.controller.VtApp;
 import ch.virustracker.app.controller.ITrackerController;
@@ -70,6 +72,27 @@ public class AltBeaconTrackerController extends AdvertiseCallback implements ITr
         AdvertiseData data = new AdvertiseData.Builder()
                 .setIncludeDeviceName( true )
                 .addServiceUuid( pUuid )
+                .build();
+        mBluetoothManager = (BluetoothManager) mainActivity.getSystemService(BLUETOOTH_SERVICE);
+        AdvertiseSettings settings = new AdvertiseSettings.Builder()
+                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)
+                .setConnectable(true)
+                .setTimeout(0)
+                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
+                .build();
+
+        advertiser.startAdvertising(settings, data, advertiseCallback);
+        BluetoothAdapter bluetoothAdapter = mBluetoothManager.getAdapter();
+        bluetoothAdapter.getBluetoothLeScanner().stopScan(scanCallback);
+    }
+
+    private void startAdvertisingNew(MainActivity mainActivity) {
+        advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
+        ParcelUuid pUuid = new ParcelUuid(UUID.fromString("00001801-0000-1000-8000-00805F9B34FB"));
+        AdvertiseData data = new AdvertiseData.Builder()
+                .setIncludeDeviceName( false )
+                .addServiceUuid( pUuid )
+                .addManufacturerData(0x00E0, new byte[] {0x01,0x02,0x03,0x04,0x01,0x02,0x03,0x04,0x01,0x02,0x03,0x04,0x01,0x02,0x03,0x04,0x01,0x02,0x03,0x04})
                 .build();
         mBluetoothManager = (BluetoothManager) mainActivity.getSystemService(BLUETOOTH_SERVICE);
         AdvertiseSettings settings = new AdvertiseSettings.Builder()
@@ -145,7 +168,7 @@ public class AltBeaconTrackerController extends AdvertiseCallback implements ITr
         @Override
         public void onCharacteristicReadRequest(BluetoothDevice device, int requestId, int offset, BluetoothGattCharacteristic characteristic) {
             //Log.i(TAG, "Read UUID");
-            mBluetoothGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, VtApp.getModel().getNewAdvertiseTokenEvent().getTokenValue().getBytes());
+            mBluetoothGattServer.sendResponse(device, requestId, BluetoothGatt.GATT_SUCCESS, 0, Base64.decode(VtApp.getModel().getNewAdvertiseTokenEvent().getTokenValue(), Base64.NO_WRAP));
         }
 
     };
@@ -185,7 +208,7 @@ public class AltBeaconTrackerController extends AdvertiseCallback implements ITr
                         float distance = 25;
                         if (rssi > -90) distance = 10;
                         if (rssi > -70) distance = 5;
-                        ReceiveEvent receiveEvent = new ReceiveEvent(System.currentTimeMillis(), Hex.encodeHexString(characteristic.getValue()), distance);
+                        ReceiveEvent receiveEvent = new ReceiveEvent(System.currentTimeMillis(), Base64.encodeToString(characteristic.getValue(), Base64.NO_WRAP), distance);
                         VtDatabase.getInstance().receivedTokenDao().insertAll(receiveEvent);
                     }
                 }
@@ -210,6 +233,8 @@ public class AltBeaconTrackerController extends AdvertiseCallback implements ITr
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
+
+            Log.v(TAG, "Scan Response: " + result.getScanRecord().getServiceUuids().size());
 
             if (!lastConnection.containsKey(result.getDevice().getAddress()) || System.currentTimeMillis() - lastConnection.get(result.getDevice().getAddress()) > CONN_TIME_THRESH) {
                 lastRssi.put(result.getDevice().getAddress(), result.getRssi());

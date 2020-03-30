@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">VirusTracker</string>
+    <string name="app_name">virus tracker</string>
     <string name="api_base_url">https://europe-west1-fabled-emissary-272419.cloudfunctions.net/</string>
 </resources>

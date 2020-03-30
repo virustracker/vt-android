@@ -5,7 +5,7 @@ import java.util.List;
 
 import ch.virustracker.app.controller.altbeacon.AltBeaconTrackerController;
 import ch.virustracker.app.controller.restapi.RestApiController;
-import ch.virustracker.app.controller.restapi.dao.SubmitReportTokensData;
+import ch.virustracker.app.controller.restapi.submitreport.SubmitReportTokensData;
 import ch.virustracker.app.model.ReportToken;
 import ch.virustracker.app.model.database.VtDatabase;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
@@ -30,7 +30,7 @@ public class Controller {
     }
 
     public void fetchNewInfections() {
-        restApiController.fetchReportTokens(null);
+        restApiController.fetchReportTokens();
     }
 
     public void onNewReportTokens(List<ReportToken> reportTokenList) {

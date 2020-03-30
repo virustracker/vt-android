@@ -1,7 +1,8 @@
 package ch.virustracker.app.controller.restapi;
 
 
-import ch.virustracker.app.controller.restapi.dao.SubmitReportTokensData;
+import ch.virustracker.app.controller.restapi.submitreport.ReportTokenResponse;
+import ch.virustracker.app.controller.restapi.submitreport.SubmitReportTokensData;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.GET;

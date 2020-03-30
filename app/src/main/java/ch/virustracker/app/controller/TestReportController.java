@@ -4,9 +4,9 @@ import android.util.Base64;
 
 import java.util.List;
 
-import ch.virustracker.app.controller.restapi.dao.Report;
-import ch.virustracker.app.controller.restapi.dao.SubmitReportTokensData;
-import ch.virustracker.app.controller.restapi.dao.Token;
+import ch.virustracker.app.controller.restapi.submitreport.Report;
+import ch.virustracker.app.controller.restapi.submitreport.SubmitReportTokensData;
+import ch.virustracker.app.controller.restapi.submitreport.Token;
 import ch.virustracker.app.model.database.VtDatabase;
 import ch.virustracker.app.model.database.advertiseevent.AdvertiseEvent;
 import ch.virustracker.app.model.database.location.Location;

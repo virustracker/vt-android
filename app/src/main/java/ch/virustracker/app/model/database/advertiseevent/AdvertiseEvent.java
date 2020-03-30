@@ -1,5 +1,7 @@
 package ch.virustracker.app.model.database.advertiseevent;
 
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
@@ -56,7 +58,7 @@ public class AdvertiseEvent implements TokenEvent {
             messageDigest.update(SALT);
             messageDigest.update(preImage);
             event.setPreImage(preImage);
-            event.setTokenValue(Hex.encodeHexString(messageDigest.digest()));
+            event.setTokenValue(Base64.encodeToString(messageDigest.digest(), Base64.NO_WRAP));
             event.setTimestampMs(System.currentTimeMillis());
             // TODO set location here if we have access to the data.
         } catch (NoSuchAlgorithmException e) {
@@ -124,7 +126,7 @@ public class AdvertiseEvent implements TokenEvent {
     @NonNull
     @Override
     public String toString() {
-        return "AdvertiseEvent { preImage: " + Hex.encodeHexString(getPreImage()) + ", token: "
+        return "AdvertiseEvent { preImage: " + Base64.encodeToString(getPreImage(), Base64.NO_WRAP) + ", token: "
                 + getToken() + ", timestampMs: " + getTimestampMs() + " }";
     }
 }
