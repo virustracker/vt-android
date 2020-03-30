@@ -30,8 +30,7 @@ public class AltBeaconProfile {
 
     private static final String TAG = AltBeaconProfile.class.getSimpleName();
 
-    //public static final String ALT_BEACON_SERVICE = "8C422626-0C6E-4B86-8EC7-9147B233D97E";
-    public static final String ALT_BEACON_SERVICE = "00422626-0C6E-4B86-8EC7-9147B233D97E";
+    public static final String ALT_BEACON_SERVICE = "8C422626-0C6E-4B86-8EC7-9147B233D97E";
     public static final String ALT_BEACON_CHARACTERISTIC = "A05F9DF4-9D54-4600-9224-983B75B9D154";
 
 

@@ -83,27 +83,6 @@ public class AltBeaconTrackerController extends AdvertiseCallback implements ITr
         bluetoothAdapter.getBluetoothLeScanner().stopScan(scanCallback);
     }
 
-    private void startAdvertisingNew(MainActivity mainActivity) {
-        advertiser = BluetoothAdapter.getDefaultAdapter().getBluetoothLeAdvertiser();
-        ParcelUuid pUuid = new ParcelUuid(UUID.fromString("00001801-0000-1000-8000-00805F9B34FB"));
-        AdvertiseData data = new AdvertiseData.Builder()
-                .setIncludeDeviceName( false )
-                .addServiceUuid( pUuid )
-                .addManufacturerData(0x00E0, new byte[] {0x01,0x02,0x03,0x04,0x01,0x02,0x03,0x04,0x01,0x02,0x03,0x04,0x01,0x02,0x03,0x04,0x01,0x02,0x03,0x04})
-                .build();
-        mBluetoothManager = (BluetoothManager) mainActivity.getSystemService(BLUETOOTH_SERVICE);
-        AdvertiseSettings settings = new AdvertiseSettings.Builder()
-                .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)
-                .setConnectable(true)
-                .setTimeout(0)
-                .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
-                .build();
-
-        advertiser.startAdvertising(settings, data, advertiseCallback);
-        BluetoothAdapter bluetoothAdapter = mBluetoothManager.getAdapter();
-        bluetoothAdapter.getBluetoothLeScanner().stopScan(scanCallback);
-    }
-
     @Override
     public void stopTracker() {
         advertiser.stopAdvertising(advertiseCallback);;
@@ -196,7 +175,7 @@ public class AltBeaconTrackerController extends AdvertiseCallback implements ITr
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             super.onCharacteristicRead(gatt, characteristic, status);
-            Log.v(TAG, "Char: " + characteristic.getStringValue(0));
+            //Log.v(TAG, "Char: " + characteristic.getStringValue(0));
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -230,9 +209,7 @@ public class AltBeaconTrackerController extends AdvertiseCallback implements ITr
         @Override
         public void onScanResult(int callbackType, ScanResult result) {
             super.onScanResult(callbackType, result);
-
-            Log.v(TAG, "Scan Response: " + result.getScanRecord().getServiceUuids().size());
-
+            //Log.v(TAG, "Scan Response: " + result.getScanRecord().getServiceUuids().size());
             if (!lastConnection.containsKey(result.getDevice().getAddress()) || System.currentTimeMillis() - lastConnection.get(result.getDevice().getAddress()) > CONN_TIME_THRESH) {
                 lastRssi.put(result.getDevice().getAddress(), result.getRssi());
                 result.getDevice().connectGatt(VtApp.getContext(), false, gattCallback);
