@@ -1,11 +1,21 @@
 package ch.virustracker.app.controller;
 
+import android.util.Base64;
+import android.util.Log;
+
+import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.virustracker.app.controller.p2pkit.ITrackerController;
 import ch.virustracker.app.controller.p2pkit.P2PKitTrackerController;
 import ch.virustracker.app.controller.restapi.RestApiController;
+import ch.virustracker.app.controller.restapi.dao.Report;
+import ch.virustracker.app.controller.restapi.dao.SubmitReportTokensData;
+import ch.virustracker.app.controller.restapi.dao.Token;
 import ch.virustracker.app.model.database.VtDatabase;
+import ch.virustracker.app.model.database.advertiseevent.AdvertiseEvent;
+import ch.virustracker.app.model.database.location.Location;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
 import ch.virustracker.app.model.ReportToken;
 import ch.virustracker.app.model.proximityevent.IProximityEventResolver;
@@ -36,5 +46,50 @@ public class Controller {
 
     public void stopTracking() {
         trackerController.stopTracker();
+    }
+
+    /**
+     * Self-report positive and send the token for the last nDays
+     *
+     * @param nDays number of days since the user had symptoms
+     */
+    public void selfReportPositiveAndSubmitTokensWithLocation(final int nDays) {
+        new Thread(() -> {
+            // perform DB call in non-ui thread
+            long searchBackTime = 1000 * 60 * 60 * 24 * nDays; // search the last nDays
+            List<AdvertiseEvent> sentTokens = VtDatabase.getInstance().advertiseEventDao()
+                    .selectByTimeSpan(System.currentTimeMillis() - searchBackTime, System.currentTimeMillis());
+            Report report = new Report();
+            report.setType("SELF_REPORT");
+            report.setResult("POSITIVE");
+            for (AdvertiseEvent ae : sentTokens) {
+                Token token = new Token();
+                token.setPreimage(encodePrefixBase64(ae.getPreImage()));
+                Location loc = ae.getLocation();
+                if (loc != null) {
+                    token.setLat(loc.getLatitude());
+                    token.setLong(loc.getLongitude());
+                }
+                report.getTokens().add(token);
+            }
+            SubmitReportTokensData data = new SubmitReportTokensData();
+            data.setReport(report);
+            restApiController.submitReportTokens(data);
+            Log.i("API", "Reported Positive and submit #" + sentTokens.size() + " tokens");
+        }).start();
+    }
+
+    /**
+     * {@link ch.virustracker.app.controller.restapi.RestApiService} callback, after a report has been submitted.
+     *
+     * @param code can be 200 (OK), 400 (Bad Request) or 500 (Internal Server Error)
+     */
+    public void onSubmittedReportTokens(int code) {
+        // TODO: provide user feedback, if needed
+        Log.i("API", "Reported Submitted, response: " + code + ".");
+    }
+
+    private static String encodePrefixBase64(byte[] bytes){
+        return Base64.encodeToString(bytes, Base64.NO_CLOSE);
     }
 }

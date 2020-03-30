@@ -5,6 +5,8 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import ch.virustracker.app.controller.VtApp;
+
 public class WebAppInterface {
     private final WebView webView;
     Context mContext;
@@ -43,6 +45,9 @@ public class WebAppInterface {
     }
     @JavascriptInterface
     public void sendInfectionRequest(String days) {
+
+        VtApp.getController().selfReportPositiveAndSubmitTokensWithLocation(Integer.valueOf(days));
+
         // use that data to store / make http request and invoke callback to inform was it successful
         webView.post(new Runnable() {
             @Override

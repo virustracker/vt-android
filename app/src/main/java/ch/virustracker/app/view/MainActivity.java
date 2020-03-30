@@ -25,7 +25,6 @@ import androidx.core.content.ContextCompat;
 
 import ch.virustracker.app.R;
 import ch.virustracker.app.controller.VtApp;
-import ch.virustracker.app.model.Model;
 
 public class MainActivity extends AppCompatActivity {
 
