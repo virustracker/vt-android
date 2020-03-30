@@ -43,10 +43,11 @@ public class RestApiController {
 
         new Thread(() -> {
             try {
-                Log.i("API", new Gson().toJson(submitReportTokenData));
+//                Log.i("API", new Gson().toJson(submitReportTokenData));
                 int code = service.submitReportTokens(submitReportTokenData).execute().code();
                 VtApp.getController().onSubmittedReportTokens(code);
             } catch (Exception e){
+//                Log.e("API", "ERROR: " + e.getLocalizedMessage());
                 e.printStackTrace();
             }
         }).start();

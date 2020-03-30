@@ -3,7 +3,6 @@ package ch.virustracker.app.controller;
 import android.util.Base64;
 import android.util.Log;
 
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,7 +63,7 @@ public class Controller {
             report.setResult("POSITIVE");
             for (AdvertiseEvent ae : sentTokens) {
                 Token token = new Token();
-                token.setPreimage(encodePrefixBase64(ae.getPreImage()));
+                token.setPreimage(Base64.encodeToString(ae.getPreImage(), Base64.NO_WRAP));
                 Location loc = ae.getLocation();
                 if (loc != null) {
                     token.setLat(loc.getLatitude());
@@ -75,7 +74,7 @@ public class Controller {
             SubmitReportTokensData data = new SubmitReportTokensData();
             data.setReport(report);
             restApiController.submitReportTokens(data);
-            Log.i("API", "Reported Positive and submit #" + sentTokens.size() + " tokens");
+//            Log.i("API", "Reported Positive and submit #" + sentTokens.size() + " tokens");
         }).start();
     }
 
@@ -86,10 +85,7 @@ public class Controller {
      */
     public void onSubmittedReportTokens(int code) {
         // TODO: provide user feedback, if needed
-        Log.i("API", "Reported Submitted, response: " + code + ".");
+//        Log.i("API", "Reported Submitted, response: " + code + ".");
     }
 
-    private static String encodePrefixBase64(byte[] bytes){
-        return Base64.encodeToString(bytes, Base64.NO_CLOSE);
-    }
 }

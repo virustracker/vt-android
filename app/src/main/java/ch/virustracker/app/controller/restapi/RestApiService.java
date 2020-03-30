@@ -13,5 +13,5 @@ public interface RestApiService {
     Call<ReportTokenResponse> getReportTokens();
 
     @POST("vt-server-token")
-    Call<SubmitReportTokensResponse> submitReportTokens(@Body SubmitReportTokensData submitReportTokenData);
+    Call<Void> submitReportTokens(@Body SubmitReportTokensData submitReportTokenData);
 }
