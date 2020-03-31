@@ -6,7 +6,6 @@ import java.util.List;
 
 import ch.virustracker.app.model.database.VtDatabase;
 import ch.virustracker.app.model.database.advertiseevent.AdvertiseEvent;
-import ch.virustracker.app.model.database.location.Location;
 
 public class SubmitReportController {
 
@@ -22,11 +21,6 @@ public class SubmitReportController {
         for (AdvertiseEvent ae : sentTokens) {
             SubmitToken token = new SubmitToken();
             token.setPreimage(Base64.encodeToString(ae.getPreImage(), Base64.NO_WRAP));
-            Location loc = ae.getLocation();
-            if (loc != null) {
-                token.setLat(loc.getLatitude());
-                token.setLong(loc.getLongitude());
-            }
             report.getTokens().add(token);
         }
         SubmitReportTokensData testReport = new SubmitReportTokensData();

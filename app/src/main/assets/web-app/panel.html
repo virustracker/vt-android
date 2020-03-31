@@ -1,4 +1,9 @@
 <ons-page>
+    <style>
+        .ons-icon.fa {
+            font-family: 'Font Awesome 5 Pro';
+        }
+    </style>
     <script>
 
         function syncAction() {
@@ -47,7 +52,7 @@
                 </div>
                 <ons-list id="side-menu-row-list">
                     <ons-list-item onclick="changeTabFromSideMenu(0)" tappable>
-                        <i class="fa fa-dashboard" style="display: inline-block; width: 25px;"></i> Dashboard
+                        <i class="fa fa-tachometer-alt" style="display: inline-block; width: 25px;"></i> Dashboard
                     </ons-list-item>
                     <ons-list-item onclick="changeTabFromSideMenu(1)" tappable>
                         <i class="fa fa-cog" style="display: inline-block; width: 25px;"></i> Settings
@@ -76,8 +81,8 @@
                     </ons-toolbar>
 
                     <ons-tabbar swipeable position="auto" id="main-tabbar">
-                        <ons-tab page="./dashboard.html" icon="ion-navicon" active-icon="ion-navicon" active></ons-tab>
-                        <ons-tab page="./settings.html" icon="ion-navicon" active-icon="ion-navicon"></ons-tab>
+                        <ons-tab page="./dashboard.html" icon="tachometer-alt" active-icon="tachometer-alt" active></ons-tab>
+                        <ons-tab page="./settings.html" icon="cog" active-icon="cog"></ons-tab>
                     </ons-tabbar>
                 </ons-page>
             </ons-navigator>

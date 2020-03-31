@@ -26,24 +26,24 @@ public class WebAppInterface {
     @JavascriptInterface
     public void getSettings() {
         String settingListJson = "{\"should_share_data\": 1}";
-        webView.post(new Runnable() {
+        /*webView.post(new Runnable() {
             @Override
             public void run() {
                 webView.loadUrl("javascript:nw.callbackUserSettings('" + settingListJson + "')");
             }
-        });
+        });*/
     }
     @JavascriptInterface
     public void getProximityEventList(long from, long to) {
         String listJson = "{\"tokens\":[{\"timestamp\": 1585094400000, \"count\": 645}, {\"timestamp\": 1585180800000, \"count\": 1215}, {\"timestamp\": 1585267200000, \"count\": 2617}, {\"timestamp\": 1585353600000, \"count\": 312}, {\"timestamp\": 1585440000000, \"count\": 3716}], \"events\":[{\"infection_state\":0,\"timestamp\":1585440000000,\"is_confidential\":false,\"distance_type\":1,\"duration\":1200000},{\"infection_state\":1,\"timestamp\":1585267200000,\"is_confidential\":true,\"distance_type\":3,\"duration\":200000}]}";
-        new Thread(() -> {
+        /*new Thread(() -> {
             webView.post(new Runnable() {
                 @Override
                 public void run() {
                     webView.loadUrl("javascript:nw.callbackProximityEventList('"+listJson+"')");
                 }
             });
-        }).start();
+        }).start();*/
     }
     @JavascriptInterface
     public void sendInfectionRequest(String days) {

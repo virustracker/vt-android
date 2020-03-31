@@ -3,12 +3,11 @@ package ch.virustracker.app.controller;
 import java.util.HashSet;
 import java.util.List;
 
-import ch.virustracker.app.controller.bluetooth.AltBeaconTrackerController;
 import ch.virustracker.app.controller.bluetooth.ITrackerController;
 import ch.virustracker.app.controller.restapi.IDataUpdateListener;
 import ch.virustracker.app.controller.restapi.RestApiController;
-import ch.virustracker.app.controller.restapi.submitreport.SubmitReportTokensData;
 import ch.virustracker.app.controller.restapi.submitreport.SubmitReportController;
+import ch.virustracker.app.controller.restapi.submitreport.SubmitReportTokensData;
 import ch.virustracker.app.model.ReportToken;
 import ch.virustracker.app.model.database.VtDatabase;
 import ch.virustracker.app.model.database.receiveevent.ReceiveEvent;
@@ -23,7 +22,7 @@ public class Controller {
 
     private final RestApiController restApiController;
     private IProximityEventResolver proximityEventResolver;
-    private ITrackerController trackerController = new AltBeaconTrackerController();
+    private ITrackerController trackerController = new StarTrackerController();
     private SubmitReportController testReportController = new SubmitReportController();
     private HashSet<IDataUpdateListener> dataUpdateListeners = new HashSet<>();
 

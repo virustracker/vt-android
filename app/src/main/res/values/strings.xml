@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">virus tracker</string>
     <string name="api_base_url">https://europe-west1-fabled-emissary-272419.cloudfunctions.net/</string>
+
+    <string name="star_sdk_service_notification_channel">@string/app_name</string>
+    <string name="star_sdk_service_notification_title">@string/app_name</string>
+    <string name="star_sdk_service_notification_text">Looking for people nearby…</string>
+
 </resources>

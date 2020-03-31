@@ -2,14 +2,21 @@ package ch.virustracker.app.controller.androidpermissions;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import static ch.virustracker.app.controller.VtApp.getContext;
 
 public class PermissionController extends AppCompatActivity {
 
@@ -22,6 +29,15 @@ public class PermissionController extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            PowerManager powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+            boolean batteryOptDeact = powerManager.isIgnoringBatteryOptimizations(getContext().getPackageName());
+
+            if (!batteryOptDeact) {
+                startActivity(new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                        Uri.parse("package:" + getContext().getPackageName())));
+            }
+
             if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 if (this.checkSelfPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
@@ -43,7 +59,7 @@ public class PermissionController extends AppCompatActivity {
                         });
                         builder.show();
                     }
-                    else {
+                    /*else {
                         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                         builder.setTitle("Functionality limited");
                         builder.setMessage("Since background location access has not been granted, this app will not be able to discover beacons in the background.  Please go to Settings -> Applications -> Permissions and grant background location access to this app.");
@@ -56,7 +72,7 @@ public class PermissionController extends AppCompatActivity {
 
                         });
                         builder.show();
-                    }
+                    }*/
 
                 }
             } else {
@@ -65,7 +81,7 @@ public class PermissionController extends AppCompatActivity {
                                     Manifest.permission.ACCESS_BACKGROUND_LOCATION},
                             PERMISSION_REQUEST_FINE_LOCATION);
                 }
-                else {
+                /*else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setTitle("Functionality limited");
                     builder.setMessage("Since location access has not been granted, this app will not be able to discover beacons.  Please go to Settings -> Applications -> Permissions and grant location access to this app.");
@@ -78,7 +94,7 @@ public class PermissionController extends AppCompatActivity {
 
                     });
                     builder.show();
-                }
+                }*/
 
             }
         }

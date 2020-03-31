@@ -24,6 +24,9 @@ import android.widget.ProgressBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import ch.virustracker.app.R;
 import ch.virustracker.app.controller.androidpermissions.PermissionController;
 import ch.virustracker.app.controller.VtApp;
@@ -36,14 +39,19 @@ public class MainActivity extends PermissionController {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        VtApp.getController().startTracking(this);
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                //VtApp.getController().startTracking(MainActivity.this);
+            }
+        }, 10000);
+        VtApp.getController().stopTracking();
         initializeView();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        VtApp.getController().stopTracking();
     }
 
     @Override

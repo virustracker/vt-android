@@ -2,12 +2,9 @@ package ch.virustracker.app.model.proximityevent;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-
-import ch.virustracker.app.model.database.location.Location;
 
 @Entity(indices = {@Index(value = {"timestampMs"})})
 public class ProximityEvent {
@@ -30,9 +27,6 @@ public class ProximityEvent {
 
     @ColumnInfo(name = "testResult")
     private String testResult;
-
-    @Embedded
-    private Location location;
 
     public String getDistance() {
         return distance;
@@ -72,14 +66,6 @@ public class ProximityEvent {
 
     public String getTestResult() {
         return testResult;
-    }
-
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
     }
 
     public long getId() {

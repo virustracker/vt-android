@@ -18,7 +18,6 @@ import java.util.Random;
 
 import ch.virustracker.app.model.Token;
 import ch.virustracker.app.model.TokenEvent;
-import ch.virustracker.app.model.database.location.Location;
 
 @Entity(indices = {@Index(value = {"tokenValue", "timestampMs"}, unique = true)})
 public class AdvertiseEvent implements TokenEvent {
@@ -41,10 +40,6 @@ public class AdvertiseEvent implements TokenEvent {
     // The timestamp when this token was advertised.
     @ColumnInfo(name = "timestampMs")
     private long timestampMs;
-
-    // The location of the device at the time of the event.
-    @Embedded
-    public Location location;
 
     // Creates an empty event. Should only be used by the DAO layer.
     public AdvertiseEvent() {
@@ -82,15 +77,6 @@ public class AdvertiseEvent implements TokenEvent {
         return new Token(tokenValue);
     }
 
-    @Override
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public long getId() {
         return id;
     }
@@ -101,6 +87,10 @@ public class AdvertiseEvent implements TokenEvent {
 
     public String getTokenValue() {
         return tokenValue;
+    }
+
+    public byte[] getTokenValueAsBase64() {
+        return Base64.decode(tokenValue, Base64.NO_WRAP);
     }
 
     public void setTokenValue(String tokenValue) {
