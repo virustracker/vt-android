@@ -1,0 +1,3 @@
+[submodule "dp3t-sdk-android"]
+	path = dp3t-sdk-android
+	url = https://github.com/DP-3T/dp3t-sdk-android.git

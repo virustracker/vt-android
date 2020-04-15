@@ -2,8 +2,18 @@
     <string name="app_name">virus tracker</string>
     <string name="api_base_url">https://europe-west1-fabled-emissary-272419.cloudfunctions.net/</string>
 
-    <string name="star_sdk_service_notification_channel">@string/app_name</string>
-    <string name="star_sdk_service_notification_title">@string/app_name</string>
-    <string name="star_sdk_service_notification_text">Looking for people nearby…</string>
+    <string name="dp3t_sdk_service_notification_channel">@string/app_name</string>
+    <string name="dp3t_sdk_service_notification_title">@string/app_name</string>
+    <string name="dp3t_sdk_service_notification_text">Looking for people nearby…</string>
+    <string name="monitoring_enabled">Contact tracing enabled</string>
+    <string name="monitoring_disabled">Contact tracing disabled</string>
+    <string name="your_status">Your Status</string>
+    <string name="status_not_tested">You have not been tested</string>
+    <string name="no_self_report">You didn\'t report yourself as infected</string>
+    <string name="contact_history">Contact History</string>
+    <string name="event_list_first_line">%1$s: %2$d high risk encounters</string>
+    <string name="event_list_second_line">and %1$d low risk encounters</string>
+    <string name="tracing_stats">Recorded %1$d anonymous handshakes in total.</string>
+    <string name="app_status">App Status</string>
 
 </resources>

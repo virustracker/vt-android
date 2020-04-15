@@ -14,7 +14,7 @@
 
     <application
         android:name=".controller.VtApp"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -28,23 +28,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name="ch.ubique.android.starsdk.TracingService"
-            android:enabled="true"
-            android:foregroundServiceType="location"
-            android:process="ch.ubique.android.starsdk.scanningprocess" />
-
-        <receiver
-            android:name="ch.ubique.android.starsdk.TracingServiceBroadcastReceiver"
-            android:enabled="true"
-            android:process="ch.ubique.android.starsdk.scanningprocess">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
-            </intent-filter>
-        </receiver>
-
 
     </application>
 

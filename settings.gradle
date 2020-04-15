@@ -1,2 +1,3 @@
-include ':app', ':starsdk'
+include ':app', ':sdk'
 rootProject.name='VirusTracker'
+project(':sdk').projectDir = new File('dp3t-sdk-android/dp3t-sdk/sdk')

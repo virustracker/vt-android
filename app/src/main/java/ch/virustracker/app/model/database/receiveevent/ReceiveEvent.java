@@ -1,11 +1,20 @@
 package ch.virustracker.app.model.database.receiveevent;
 
+import android.util.Base64;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import org.dpppt.android.sdk.internal.database.models.Handshake;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ch.virustracker.app.controller.DistanceUtil;
+import ch.virustracker.app.model.ReportToken;
 import ch.virustracker.app.model.Token;
 import ch.virustracker.app.model.TokenEvent;
 
@@ -36,6 +45,22 @@ public class ReceiveEvent implements TokenEvent {
         this.timestampMs = timestampMs;
         this.distanceMeter = distance;
     }
+
+    public ReceiveEvent(Handshake handshake) {
+        this.tokenValue = Base64.encodeToString(handshake.getEphId(), Base64.NO_WRAP);
+        this.timestampMs = handshake.getTimestamp();
+        this.distanceMeter = DistanceUtil.getDistanceFromRssi(handshake.getRssi());
+    }
+
+    public static List<ReceiveEvent> getReceiveEventsFromHandshakes(List<Handshake> handshakes) {
+        List<ReceiveEvent> list = new ArrayList(handshakes.size());
+        for (Handshake handshake : handshakes) {
+            ReceiveEvent receiveEvent = new ReceiveEvent(handshake);
+            list.add(receiveEvent);
+        }
+        return list;
+    }
+
     public long getId() {
         return id;
     }

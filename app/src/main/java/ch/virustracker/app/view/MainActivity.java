@@ -1,145 +1,155 @@
 package ch.virustracker.app.view;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
-import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.webkit.ConsoleMessage;
-import android.webkit.HttpAuthHandler;
-import android.webkit.JsResult;
-import android.webkit.PermissionRequest;
-import android.webkit.SslErrorHandler;
-import android.webkit.ValueCallback;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
+import android.os.Handler;
+import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import org.dpppt.android.sdk.DP3T;
+import org.dpppt.android.sdk.internal.AppConfigManager;
+
+import java.io.FileNotFoundException;
+import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import ch.virustracker.app.R;
-import ch.virustracker.app.controller.androidpermissions.PermissionController;
 import ch.virustracker.app.controller.VtApp;
+import ch.virustracker.app.controller.androidpermissions.PermissionController;
+import ch.virustracker.app.model.database.proximityevent.Distance;
+import ch.virustracker.app.model.proximityevent.ProximityEvent;
+import ch.virustracker.app.model.proximityevent.ProximityEventSummary;
+
+import static ch.virustracker.app.controller.VtApp.getContext;
 
 public class MainActivity extends PermissionController {
 
+    public static final String TAG = MainActivity.class.getSimpleName();
+
     private static final int MY_PERMISSIONS_REQUEST_FINE_LOCATION = 12246;
+    private static final int REQUEST_CODE_PERMISSION_LOCATION = 1;
+    private static final int REQUEST_CODE_SAVE_DB = 2;
+    private static final int REQUEST_CODE_REPORT_EXPOSED = 3;
+
+    private static final DateFormat DATE_FORMAT_SYNC = SimpleDateFormat.getDateTimeInstance();
+
+    private static final String REGEX_VALIDITY_AUTH_CODE = "\\w+";
+    private static final int EXPOSED_MIN_DATE_DIFF = -21;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                //VtApp.getController().startTracking(MainActivity.this);
+        setContentView(R.layout.native_main);
+        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setDisplayShowCustomEnabled(true);
+        getSupportActionBar().setCustomView(R.layout.action_bar);
+        initUi();
+    }
+
+    private void initUi() {
+        Button enableTracingButton = ((Button) findViewById(R.id.enableTracingButton));
+        enableTracingButton.setOnClickListener(v -> {
+            if (AppConfigManager.getInstance(VtApp.getContext()).isReceivingEnabled()) {
+                VtApp.getController().stopTracking();
+            } else {
+                VtApp.getController().startTracking(this);
             }
-        }, 10000);
-        VtApp.getController().stopTracking();
-        initializeView();
+            updateEnableButtonState();
+        });
+    }
+
+    private void updateUi() {
+        updateEnableButtonState();
+        updateProximityEventList();
+    }
+
+    private void updateProximityEventList() {
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.proximityEventList);
+        recyclerView.setHasFixedSize(false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        new Thread(() -> {
+            List<ProximityEvent> proximityEvents = VtApp.getModel().getEncountersForTimeSpan(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 5, System.currentTimeMillis());
+            runOnUiThread(() -> ((TextView)findViewById(R.id.stats)).setText(VtApp.getContext().getString(R.string.tracing_stats, proximityEvents.size())));
+            List<ProximityEventSummary> proximityEventsByDay = ProximityEventSummary.getProximityEventsByDay(proximityEvents);
+            ProximityEventListAdapter mAdapter = new ProximityEventListAdapter(proximityEventsByDay);
+            runOnUiThread(() -> recyclerView.setAdapter(mAdapter));
+        }).start();
+    }
+
+    private void updateEnableButtonState() {
+        Button enableTracingButton = ((Button) findViewById(R.id.enableTracingButton));
+        if (AppConfigManager.getInstance(VtApp.getContext()).isReceivingEnabled()) {
+            enableTracingButton.setBackgroundColor(getColor(R.color.buttonActive));
+            enableTracingButton.setText(R.string.monitoring_enabled);
+        } else {
+            enableTracingButton.setBackgroundColor(getColor(R.color.buttonInactive));
+            enableTracingButton.setText(R.string.monitoring_disabled);
+        }
+    }
+
+    private BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+            }
+        }
+    };
+
+    private BroadcastReceiver sdkReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //VtApp.getController().fetchNewInfections();
+        getContext().registerReceiver(bluetoothReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+        getContext().registerReceiver(sdkReceiver, DP3T.getUpdateIntentFilter());
+        updateUi();
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
+        getContext().unregisterReceiver(bluetoothReceiver);
+        getContext().unregisterReceiver(sdkReceiver);
     }
 
     @Override
-    protected void onPostResume() {
-        super.onPostResume();
-        VtApp.getController().fetchNewInfections();
-        checkPermissions();
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SAVE_DB && resultCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            try {
+                OutputStream targetOut = getContext().getContentResolver().openOutputStream(uri);
+                DP3T.exportDb(getContext(), targetOut, () ->
+                        new Handler(getContext().getMainLooper()).post(() -> {}));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            return;
+        } else if (requestCode == REQUEST_CODE_REPORT_EXPOSED) {
+            if (resultCode == Activity.RESULT_OK) {
+
+            }
+        }
     }
 
-    private void checkPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH_ADMIN}, MY_PERMISSIONS_REQUEST_FINE_LOCATION);
-        }
-    }
-
-    private void initializeView() {
-        WebView webView = (WebView) findViewById(R.id.webview);
-        webView.setVisibility(View.GONE);
-        webView.setBackgroundColor(Color.TRANSPARENT);
-        webView.addJavascriptInterface(new WebAppInterface(this, webView), "Android"); // TODO: Should be webappinterface
-        webView.loadUrl("file:///android_asset/web-app/index.html");
-        webView.setWebChromeClient(new WebChromeClient() {
-            @Override
-            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
-                Log.d("ChromeWebView", message);
-                return false;
-            }
-
-            @Override
-            public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
-                Log.d("ChromeWebView", "File choose");
-                return true;
-            }
-            @Override
-            public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-                Log.d("ChromeWebView", consoleMessage.message());
-                return false;
-            }
-            @Override
-            public void onPermissionRequest(PermissionRequest request) {
-                Log.d("ChromeWebView", request.toString());
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    request.grant(request.getResources());
-                }
-            }
-        });
-        webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                if (errorCode == 401) {
-                    Log.d("WebView", "Error");
-                }
-            }
-            @Override
-            public void onReceivedHttpAuthRequest(WebView view, HttpAuthHandler handler, String host, String realm) {
-                handler.proceed("", "");
-            }
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView v, String url) {
-                Log.d("WebView", url);
-                return false;
-            }
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                ProgressBar progressBar = findViewById(R.id.progressBar);
-                progressBar.setVisibility(View.GONE);
-                view.setAlpha(0f);
-                view.setVisibility(View.VISIBLE);
-                view.animate()
-                        .alpha(1.0f)
-                        .setDuration(800)
-                        .setListener(null);
-            }
-        });
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setAllowFileAccess(true);
-        webSettings.setAllowContentAccess(true);
-        webSettings.setAllowFileAccessFromFileURLs(true);
-        webSettings.getAllowUniversalAccessFromFileURLs();
-    }
 }

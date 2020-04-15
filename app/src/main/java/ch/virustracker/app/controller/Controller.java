@@ -1,5 +1,8 @@
 package ch.virustracker.app.controller;
 
+import org.dpppt.android.sdk.internal.database.Database;
+import org.dpppt.android.sdk.internal.database.models.Handshake;
+
 import java.util.HashSet;
 import java.util.List;
 
@@ -22,7 +25,7 @@ public class Controller {
 
     private final RestApiController restApiController;
     private IProximityEventResolver proximityEventResolver;
-    private ITrackerController trackerController = new StarTrackerController();
+    private ITrackerController trackerController = new DP3TTrackerController();
     private SubmitReportController testReportController = new SubmitReportController();
     private HashSet<IDataUpdateListener> dataUpdateListeners = new HashSet<>();
 
@@ -36,7 +39,10 @@ public class Controller {
     }
 
     public void onNewReportTokens(List<ReportToken> reportTokenList) {
-        List<ReceiveEvent> seenTokens = VtDatabase.getInstance().receivedTokenDao().selectByTimeSpan(System.currentTimeMillis() - SEARCH_BACKTIME_MS, System.currentTimeMillis());
+        Database database = new Database(VtApp.getContext());
+        List<Handshake> handshakes = database.getHandshakes();
+        List<ReceiveEvent> seenTokens = ReceiveEvent.getReceiveEventsFromHandshakes(handshakes);
+        //List<ReceiveEvent> seenTokens = VtDatabase.getInstance().receivedTokenDao().selectByTimeSpan(System.currentTimeMillis() - SEARCH_BACKTIME_MS, System.currentTimeMillis());
         List<ProximityEvent> proximityEvents = proximityEventResolver.resolveProximityEvents(seenTokens, reportTokenList);
         for (ProximityEvent proximityEvent : proximityEvents) VtDatabase.getInstance().proximityEventDao().insertAll(proximityEvent);
         for (IDataUpdateListener listener : dataUpdateListeners) {

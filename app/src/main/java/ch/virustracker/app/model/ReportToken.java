@@ -2,6 +2,11 @@ package ch.virustracker.app.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.dpppt.android.sdk.internal.database.models.Handshake;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import ch.virustracker.app.model.Token;
 
 // Represents a token obtained from the server that corresponds to a test result that was
